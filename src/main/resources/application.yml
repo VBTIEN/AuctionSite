@@ -1,0 +1,18 @@
+server:
+ port: 8080
+ servlet:
+  context-path: /auctionsite
+
+Spring:
+ datasource:
+  url: "jdbc:mysql://localhost:3306/auctionsite"
+  username: root
+  password:
+ jpa:
+  hibernate:
+   ddl-auto: update
+  show-sql: true
+
+jwt:
+ signerKey: "0kWpd2ibxamMidMm7g8VcpjSwbYfE9R60o50G2dbXdOlAABZk3/HLQoOJ3IKZV03"
+
