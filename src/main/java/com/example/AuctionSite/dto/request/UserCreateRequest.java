@@ -2,6 +2,7 @@ package com.example.AuctionSite.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +27,12 @@ public class UserCreateRequest {
     @Email(message = "EMAIL_INVALID")
     String email;
     
+    @NotBlank(message = "")
+    @Past(message = "")
     LocalDate dob;
     
+    
+    @NotBlank(message = "")
+    @Size(max = 50, message = "")
     String fullName;
 }

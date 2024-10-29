@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -15,8 +17,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Cost {
     @Id
-    String id;
-    long startCost;
-    int step;
-    long finalCost;
+    String name;
+    BigDecimal startCost;
 }

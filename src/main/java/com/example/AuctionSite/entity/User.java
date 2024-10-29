@@ -11,6 +11,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
@@ -28,8 +29,11 @@ public class User {
     LocalTime actionTime;
     int purchases;
     int sales;
+    int sumOfRate;
+    int numberOfRate;
     
     @ManyToMany
+    @ToString.Exclude
     Set<Role> roles;
     
     @ManyToOne
@@ -37,4 +41,23 @@ public class User {
     
     @ManyToOne
     Rate rate;
+    
+    @OneToMany
+    @ToString.Exclude
+    Set<Product> products;
+    
+    @ManyToMany
+    @ToString.Exclude
+    Set<Notification> notifications;
+    
+    @OneToMany
+    @ToString.Exclude
+    Set<Auction> auctions;
+    
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    Set<Bid> bids;
+    
+    @OneToMany(mappedBy = "users")
+    Set<Follow> follows;
 }

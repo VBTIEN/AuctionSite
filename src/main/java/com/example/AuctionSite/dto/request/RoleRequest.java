@@ -1,10 +1,9 @@
 package com.example.AuctionSite.dto.request;
 
-import com.example.AuctionSite.entity.Permission;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.lang.reflect.Type;
 import java.util.Set;
 
 @Data
@@ -13,7 +12,11 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleRequest {
+    @NotBlank(message = "")
     String name;
+    
+    @NotBlank(message = "")
     String description;
+    
     Set<String> permissions;
 }

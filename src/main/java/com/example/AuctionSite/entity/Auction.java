@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,17 +17,36 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Auction {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
     String name;
+    String description;
+    LocalDateTime timeStart;
+    String status;
+    int finalCost;
+    int numberOfBids;
     
-    @OneToOne
+    @OneToMany(mappedBy = "auction")
+    @ToString.Exclude
+    Set<Bid> bids;
+    
+    @ManyToOne
     Time time;
-    
-    @OneToOne
-    ToAuction toAuction;
     
     @ManyToMany
     @ToString.Exclude
-    List<Notice> notices;
+    Set<Notification> notifications;
+    
+    @OneToOne
+    Product product;
+    
+    @ManyToOne
+    Cost cost;
+    
+    @ManyToOne
+    Step step;
+    
+    @OneToMany(mappedBy = "auctions")
+    @ToString.Exclude
+    Set<Follow> follows;
 }

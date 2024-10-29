@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,18 +16,17 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
     String name;
     String description;
+    String status;
     
     @ManyToMany
     @ToString.Exclude
-    List<Image> images;
+    Set<Category> categories;
     
-    @ManyToOne
-    Category category;
-    
-    @ManyToOne
-    User user;
+    @OneToMany
+    @ToString.Exclude
+    Set<Image> images;
 }

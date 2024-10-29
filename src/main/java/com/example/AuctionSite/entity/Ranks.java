@@ -1,11 +1,10 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -20,6 +19,9 @@ public class Ranks {
     @Id
     String name;
     String description;
+    LocalTime rankTime;
+    int rankPurchases;
+    int rankSales;
     
     @ManyToMany
     @ToString.Exclude

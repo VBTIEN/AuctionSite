@@ -12,27 +12,41 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "sumOfRate", ignore = true)
     @Mapping(target = "sales", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)
     @Mapping(target = "purchases", ignore = true)
+    @Mapping(target = "products", ignore = true)
+    @Mapping(target = "numberOfRate", ignore = true)
+    @Mapping(target = "notifications", ignore = true)
     @Mapping(target = "joiningDate", ignore = true)
-    @Mapping(target = "actionTime", ignore = true)
-    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "follows", ignore = true)
+    @Mapping(target = "bids", ignore = true)
+    @Mapping(target = "auctions", ignore = true)
+    @Mapping(target = "actionTime", ignore = true)
     User toUser(UserCreateRequest userCreateRequest);
     
     UserResponse toUserResponse(User user);
     
     List<UserResponse> toListUserResponse(List<User> users);
     
+    @Mapping(target = "sumOfRate", ignore = true)
     @Mapping(target = "sales", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)
     @Mapping(target = "purchases", ignore = true)
+    @Mapping(target = "products", ignore = true)
+    @Mapping(target = "numberOfRate", ignore = true)
+    @Mapping(target = "notifications", ignore = true)
     @Mapping(target = "joiningDate", ignore = true)
-    @Mapping(target = "actionTime", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "roles", ignore = true)
-    void updateUser(@MappingTarget User user, UserUpdateRequest userUpdateRequest);
+    @Mapping(target = "follows", ignore = true)
+    @Mapping(target = "bids", ignore = true)
+    @Mapping(target = "auctions", ignore = true)
+    @Mapping(target = "actionTime", ignore = true)
+    void toUpdateUser(@MappingTarget User user, UserUpdateRequest userUpdateRequest);
 }

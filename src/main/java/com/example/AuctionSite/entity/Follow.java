@@ -1,7 +1,6 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,8 +12,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Notice {
+public class Follow {
     @Id
-    String name;
-    String description;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+    
+    @ManyToOne
+    User users;
+    
+    @ManyToOne
+    Auction auctions;
 }

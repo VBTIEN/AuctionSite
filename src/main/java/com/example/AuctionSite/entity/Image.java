@@ -1,7 +1,6 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Image {
     @Id
-    String name;
-    String iamge;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
+    String imageURL;
 }

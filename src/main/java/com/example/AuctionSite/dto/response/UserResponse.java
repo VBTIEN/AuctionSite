@@ -1,9 +1,6 @@
 package com.example.AuctionSite.dto.response;
 
-import com.example.AuctionSite.entity.Product;
-import com.example.AuctionSite.entity.Ranks;
-import com.example.AuctionSite.entity.Rate;
-import com.example.AuctionSite.entity.Role;
+import com.example.AuctionSite.entity.*;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -12,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,11 +26,22 @@ public class UserResponse {
     LocalTime actionTime;
     int purchases;
     int sales;
+    int sumOfRate;
+    int numberOfRate;
     
     Set<RoleResponse> roles;
     
-    Ranks ranks;
+    RanksResponse ranks;
     
-    Rate rate;
+    RateResponse rate;
     
+    Set<ProductResponse> products;
+    
+    Set<NotificationResponse> notifications;
+    
+    Set<AuctionResponse> auctions;
+    
+    Set<BidResponse> bids;
+    
+    Set<FollowResponse> follows;
 }

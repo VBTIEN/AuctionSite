@@ -65,15 +65,14 @@ public class UserService {
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() ->
-            new AppException(ErrorCode.USER_NOTEXISTED));
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISTED));
         return userMapper.toUserResponse(user);
     }
     
     @PreAuthorize("hasAuthority('UPDATE_USER')")
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        userMapper.updateUser(user, userUpdateRequest);
+        userMapper.toUpdateUser(user, userUpdateRequest);
         user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }

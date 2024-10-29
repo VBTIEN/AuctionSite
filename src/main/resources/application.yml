@@ -3,7 +3,7 @@ server:
  servlet:
   context-path: /auctionsite
 
-Spring:
+spring:
  datasource:
   url: "jdbc:mysql://localhost:3306/auctionsite"
   username: root
@@ -12,6 +12,11 @@ Spring:
   hibernate:
    ddl-auto: update
   show-sql: true
+ servlet:
+  multipart:
+   enabled: true
+   max-file-size: 10MB
+   max-request-size: 10MB
 
 jwt:
  signerKey: "0kWpd2ibxamMidMm7g8VcpjSwbYfE9R60o50G2dbXdOlAABZk3/HLQoOJ3IKZV03"

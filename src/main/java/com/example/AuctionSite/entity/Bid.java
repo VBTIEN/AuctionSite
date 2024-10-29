@@ -1,9 +1,6 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,14 +14,19 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ToAuction {
+public class Bid {
     @Id
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+    int bidMount;
+    
+    @ManyToOne
+    User user;
+    
+    @ManyToOne
+    Auction auction;
     
     @ManyToMany
     @ToString.Exclude
-    Set<User> users;
-    
-    @OneToOne
-    Cost cost;
+    Set<Notification> notifications;
 }

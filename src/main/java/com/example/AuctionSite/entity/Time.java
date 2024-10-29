@@ -5,8 +5,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.Duration;
 
 @Entity
 @Getter
@@ -18,6 +17,6 @@ import java.time.LocalTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Time {
     @Id
-    LocalTime time;
-    LocalDateTime timeStart;
+    String name;
+    Duration time;
 }
