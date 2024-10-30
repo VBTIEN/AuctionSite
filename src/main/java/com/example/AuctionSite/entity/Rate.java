@@ -21,4 +21,8 @@ public class Rate {
     @Id
     Float numberOfStar;
     String description;
+    
+    @OneToMany
+    @ToString.Exclude
+    Set<User> users;
 }

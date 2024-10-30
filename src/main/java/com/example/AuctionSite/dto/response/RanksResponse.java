@@ -15,8 +15,8 @@ public class RanksResponse {
     String name;
     String description;
     LocalTime rankTime;
-    int rankPurchases;
-    int rankSales;
+    Integer rankPurchases;
+    Integer rankSales;
     
     Set<BenefitResponse> benefits;
 }

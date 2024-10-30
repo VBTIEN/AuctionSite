@@ -27,10 +27,10 @@ public class User {
     String fullName;
     LocalDate joiningDate;
     LocalTime actionTime;
-    int purchases;
-    int sales;
-    int sumOfRate;
-    int numberOfRate;
+    Integer purchases;
+    Integer sales;
+    Integer sumOfRate;
+    Integer numberOfRate;
     
     @ManyToMany
     @ToString.Exclude
@@ -59,5 +59,6 @@ public class User {
     Set<Bid> bids;
     
     @OneToMany(mappedBy = "users")
+    @ToString.Exclude
     Set<Follow> follows;
 }

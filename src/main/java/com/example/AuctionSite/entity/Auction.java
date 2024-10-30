@@ -23,8 +23,8 @@ public class Auction {
     String description;
     LocalDateTime timeStart;
     String status;
-    int finalCost;
-    int numberOfBids;
+    Integer finalCost;
+    Integer numberOfBids;
     
     @OneToMany(mappedBy = "auction")
     @ToString.Exclude

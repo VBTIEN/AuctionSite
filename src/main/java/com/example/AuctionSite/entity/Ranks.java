@@ -20,10 +20,14 @@ public class Ranks {
     String name;
     String description;
     LocalTime rankTime;
-    int rankPurchases;
-    int rankSales;
+    Integer rankPurchases;
+    Integer rankSales;
     
     @ManyToMany
     @ToString.Exclude
     Set<Benefit> benefits;
+    
+    @OneToMany
+    @ToString.Exclude
+    Set<User> users;
 }

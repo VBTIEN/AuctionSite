@@ -24,10 +24,10 @@ public class UserResponse {
     String fullName;
     LocalDate joiningDate;
     LocalTime actionTime;
-    int purchases;
-    int sales;
-    int sumOfRate;
-    int numberOfRate;
+    Integer purchases;
+    Integer sales;
+    Integer sumOfRate;
+    Integer numberOfRate;
     
     Set<RoleResponse> roles;
     

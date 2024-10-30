@@ -9,11 +9,13 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface RanksMapper {
+    @Mapping(target = "users", ignore = true)
     @Mapping(target = "benefits", ignore = true)
     Ranks toRanks(RanksRequest ranksRequest);
     
     RanksResponse toRanksResponse(Ranks ranks);
     
+    @Mapping(target = "users", ignore = true)
     @Mapping(target = "benefits", ignore = true)
     void toUpdateRank(@MappingTarget Ranks ranks, RanksRequest ranksRequest);
 }

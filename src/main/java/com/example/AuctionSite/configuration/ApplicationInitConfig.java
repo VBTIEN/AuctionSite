@@ -99,7 +99,7 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_NOTIFICATION","Update notification permission");
         createPermissionIfNotExists("DELETE_NOTIFICATION","Delete notification permission");
         
-        createPermissionIfNotExists("UPLOAD_IMAGE","Upload image permission");
+        createPermissionIfNotExists("UPLOAD_IMAGES","Upload images permission");
         createPermissionIfNotExists("GET_ALL_IMAGES","Get all images permission");
         createPermissionIfNotExists("GET_IMAGE_BY_ID","Get image by id permission");
         createPermissionIfNotExists("UPDATE_IMAGE","Update image permission");

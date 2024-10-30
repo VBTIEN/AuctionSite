@@ -18,7 +18,7 @@ public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    int bidMount;
+    Integer bidMount;
     
     @ManyToOne
     User user;

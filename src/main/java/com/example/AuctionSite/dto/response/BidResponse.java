@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BidResponse {
-    int bidMount;
+    Integer bidMount;
     
     UserResponse user;
     

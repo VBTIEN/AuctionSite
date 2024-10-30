@@ -40,8 +40,10 @@ public class UserService {
         }
         User user = userMapper.toUser(userCreateRequest);
         user.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
+        
         Set<Role> role = new HashSet<>();
-        role.add(roleRepository.findById("USER").get());
+        role.add(roleRepository.findById("USER").orElseThrow());
+        
         user.setRoles(role);
         user.setJoiningDate(LocalDate.now());
         return userMapper.toUserResponse(userRepository.save(user));
@@ -73,6 +75,7 @@ public class UserService {
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userMapper.toUpdateUser(user, userUpdateRequest);
+        
         user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }

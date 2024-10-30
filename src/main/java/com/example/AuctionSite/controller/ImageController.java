@@ -21,10 +21,10 @@ import java.util.List;
 public class ImageController {
     ImageService imageService;
     
-    @PostMapping("/upload_image")
-    ApiResponse<ImageResponse> uploadImage(@ModelAttribute ImageRequest imageRequest) throws IOException {
-        return ApiResponse.<ImageResponse>builder()
-            .result(imageService.uploadImage(imageRequest))
+    @PostMapping("/upload_images")
+    ApiResponse<List<ImageResponse>> uploadImages(@ModelAttribute ImageRequest imageRequest) throws IOException {
+        return ApiResponse.<List<ImageResponse>>builder()
+            .result(imageService.uploadImages(imageRequest))
             .build();
     }
     

@@ -23,10 +23,10 @@ public class RanksRequest {
     LocalTime rankTime;
     
     @NotBlank(message = "")
-    int rankPurchases;
+    Integer rankPurchases;
     
     @NotBlank(message = "")
-    int rankSales;
+    Integer rankSales;
     
     Set<String> benefits;
 }

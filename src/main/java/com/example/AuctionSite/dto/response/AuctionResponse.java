@@ -16,8 +16,8 @@ public class AuctionResponse {
     String description;
     LocalDateTime timeStart;
     String status;
-    int finalCost;
-    int numberOfBids;
+    Integer finalCost;
+    Integer numberOfBids;
     
     Set<BidResponse> bids;
     

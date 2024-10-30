@@ -27,7 +27,6 @@ public class UserCreateRequest {
     @Email(message = "EMAIL_INVALID")
     String email;
     
-    @NotBlank(message = "")
     @Past(message = "")
     LocalDate dob;
     
