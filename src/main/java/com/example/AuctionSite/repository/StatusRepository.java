@@ -1,10 +1,9 @@
 package com.example.AuctionSite.repository;
 
-import com.example.AuctionSite.entity.Image;
+import com.example.AuctionSite.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImageRepository extends JpaRepository<Image,Integer> {
-    boolean existsByImageURL(String imageURL);
+public interface StatusRepository extends JpaRepository<Status, String> {
 }

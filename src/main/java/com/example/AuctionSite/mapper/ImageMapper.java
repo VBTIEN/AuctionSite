@@ -13,4 +13,7 @@ public interface ImageMapper {
     Image toImage(ImageRequest imageRequest);
     
     ImageResponse toImageResponse(Image image);
+    
+    @Mapping(target = "id", ignore = true)
+    Image toImage(ImageResponse imageResponse);
 }

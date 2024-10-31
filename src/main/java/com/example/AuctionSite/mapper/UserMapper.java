@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)
     @Mapping(target = "products", ignore = true)
@@ -33,7 +32,6 @@ public interface UserMapper {
     UserResponse toUserResponse(User user);
     
     List<UserResponse> toListUserResponse(List<User> users);
-    
     
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)

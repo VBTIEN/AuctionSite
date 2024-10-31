@@ -1,4 +1,4 @@
-package com.example.AuctionSite.enums;
+package com.example.AuctionSite.exception;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -6,7 +6,7 @@ import com.example.AuctionSite.dto.response.UserResponse;
 import com.example.AuctionSite.entity.Role;
 import com.example.AuctionSite.entity.User;
 import com.example.AuctionSite.exception.AppException;
-import com.example.AuctionSite.enums.ErrorCode;
+import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.mapper.UserMapper;
 import com.example.AuctionSite.repository.RoleRepository;
 import com.example.AuctionSite.repository.UserRepository;

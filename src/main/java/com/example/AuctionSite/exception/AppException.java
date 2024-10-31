@@ -1,6 +1,5 @@
 package com.example.AuctionSite.exception;
 
-import com.example.AuctionSite.enums.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

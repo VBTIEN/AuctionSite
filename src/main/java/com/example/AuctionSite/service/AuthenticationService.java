@@ -6,7 +6,7 @@ import com.example.AuctionSite.dto.response.AuthenticationResponse;
 import com.example.AuctionSite.dto.response.IntrospectResponse;
 import com.example.AuctionSite.entity.User;
 import com.example.AuctionSite.exception.AppException;
-import com.example.AuctionSite.enums.ErrorCode;
+import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;

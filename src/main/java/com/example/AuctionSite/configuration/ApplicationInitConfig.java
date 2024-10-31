@@ -31,6 +31,7 @@ public class ApplicationInitConfig {
     CostRepository costRepository;
     CategoryRepository categoryRepository;
     NotificationRepository notificationRepository;
+    StatusRepository statusRepository;
     
     @Bean
     ApplicationRunner applicationRunner() {
@@ -43,6 +44,7 @@ public class ApplicationInitConfig {
             initializeCosts();
             initializeCategories();
             initializeNotifications();
+            initializeStatus();
             createDefaultAdminUser();
         };
     }
@@ -66,6 +68,12 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_STEP","Update step permission");
         createPermissionIfNotExists("DELETE_STEP","Delete step permission");
         
+        createPermissionIfNotExists("CREATE_STATUS","Create status permission");
+        createPermissionIfNotExists("GET_ALL_STATUS","Get all status permission");
+        createPermissionIfNotExists("GET_STATUS_BY_NAME","Get status by name permission");
+        createPermissionIfNotExists("UPDATE_STATUS","Update status permission");
+        createPermissionIfNotExists("DELETE_STATUS","Delete status permission");
+        
         createPermissionIfNotExists("CREATE_ROLE","Create role permission");
         createPermissionIfNotExists("GET_ALL_ROLES","Get all roles permission");
         createPermissionIfNotExists("UPDATE_ROLE","Update role permission");
@@ -84,7 +92,9 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("DELETE_RANK","Delete rank permission");
         
         createPermissionIfNotExists("CREATE_PRODUCT","Create product permission");
-        createPermissionIfNotExists("GET_ALL_PRODUCT","Get all products permission");
+        createPermissionIfNotExists("GET_ALL_PRODUCTS","Get all products permission");
+        createPermissionIfNotExists("GET_PRODUCT_BY_ID","Get product by id permission");
+        createPermissionIfNotExists("GET_PRODUCT_BY_NAME","Get product by name permission");
         createPermissionIfNotExists("UPDATE_PRODUCT","Update product permission");
         createPermissionIfNotExists("DELETE_PRODUCT","Delete product permission");
         
@@ -257,6 +267,26 @@ public class ApplicationInitConfig {
         createNotificationIfNotExists("PERSONAL_INFORMATION_UPDATE_NOTICE","Thông tin cá nhân của bạn đã được cập nhật thành công.");
     }
     
+    private void initializeStatus() {
+        createStatusIfNotExists("ONLINE", "Đang hoạt động");
+        createStatusIfNotExists("LOGGED_IN", "Đã đăng nhập");
+        createStatusIfNotExists("LOGGED_OUT", "Đã đăng xuất");
+        
+        createStatusIfNotExists("PENDING_APPROVAL", "Chờ duyệt");
+        createStatusIfNotExists("PENDING_AUCTION", "Chờ đấu giá");
+        createStatusIfNotExists("ACTIVE", "Đang đấu giá");
+        createStatusIfNotExists("SOLD", "Đã bán");
+        createStatusIfNotExists("UNSOLD", "Không bán được");
+        createStatusIfNotExists("SUSPENDED", "Tạm ngưng");
+        
+        createStatusIfNotExists("PENDING", "Chờ bắt đầu");
+        createStatusIfNotExists("ONGOING", "Đang diễn ra");
+        createStatusIfNotExists("CLOSING_SOON", "Sắp kết thúc");
+        createStatusIfNotExists("ENDED", "Đã kết thúc");
+        createStatusIfNotExists("COMPLETED", "Đã hoàn tất");
+        createStatusIfNotExists("CANCELLED", "Hủy đấu giá");
+    }
+    
     private void createDefaultAdminUser() {
         if (userRepository.findByUsername("admin").isEmpty()) {
             Set<Role> role = Set.of(roleRepository.findById("ADMIN").orElseThrow());
@@ -374,6 +404,19 @@ public class ApplicationInitConfig {
                     .description(description)
                     .build();
                 notificationRepository.save(notification);
+            }
+        );
+    }
+    
+    private void createStatusIfNotExists(String name, String description) {
+        statusRepository.findById(name).ifPresentOrElse(
+            status -> {},
+            () -> {
+                Status status = Status.builder()
+                    .name(name)
+                    .description(description)
+                    .build();
+                statusRepository.save(status);
             }
         );
     }

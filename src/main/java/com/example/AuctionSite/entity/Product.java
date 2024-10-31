@@ -20,7 +20,9 @@ public class Product {
     Integer id;
     String name;
     String description;
-    String status;
+    
+    @ManyToOne
+    Status status;
     
     @ManyToMany
     @ToString.Exclude

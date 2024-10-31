@@ -1,7 +1,7 @@
 package com.example.AuctionSite.configuration;
 
 import com.example.AuctionSite.dto.response.ApiResponse;
-import com.example.AuctionSite.enums.ErrorCode;
+import com.example.AuctionSite.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

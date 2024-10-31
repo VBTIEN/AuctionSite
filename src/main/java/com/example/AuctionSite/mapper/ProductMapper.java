@@ -9,13 +9,14 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "images", ignore = true)
     Product toProduct(ProductRequest productRequest);
     
     ProductResponse toProductResponse(Product product);
     
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "images", ignore = true)
