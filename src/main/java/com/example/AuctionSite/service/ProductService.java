@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,8 @@ public class ProductService {
     ImageService imageService;
     ImageRepository imageRepository;
     StatusRepository statusRepository;
+    UserService userService;
+    JdbcTemplate jdbcTemplate;
     
     @PreAuthorize("hasAuthority('CREATE_PRODUCT')")
     public ProductResponse createProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
@@ -53,8 +56,12 @@ public class ProductService {
         }
         
         product.setImages(images);
+        product=productRepository.save(product);
         
-        return productMapper.toProductResponse(productRepository.save(product));
+        String userId = userService.getUserId();
+        userService.addProductToUser(userId, product.getId());
+        
+        return productMapper.toProductResponse(product);
     }
     
     @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS')")
@@ -71,9 +78,6 @@ public class ProductService {
     
     @PreAuthorize("hasAuthority('GET_PRODUCT_BY_NAME')")
     public List<ProductResponse> getProductByName(String name) {
-        /*Product product = productRepository.findByName(name).orElseThrow(() -> new RuntimeException("Product not found"));
-        return productMapper.toProductResponse(product);*/
-        
         List<Product> products=productRepository.findAllByName(name);
         return products.stream().map(productMapper::toProductResponse).toList();
     }
@@ -134,6 +138,9 @@ public class ProductService {
                 imageService.deleteImage(image.getId());
             }
         }
+        
+        String deleteUserProductQuery = "DELETE FROM user_products WHERE products_id = ?";
+        jdbcTemplate.update(deleteUserProductQuery, id);
         
         productRepository.delete(product);
     }

@@ -3,11 +3,13 @@ package com.example.AuctionSite.service;
 import com.example.AuctionSite.dto.request.UserCreateRequest;
 import com.example.AuctionSite.dto.request.UserUpdateRequest;
 import com.example.AuctionSite.dto.response.UserResponse;
+import com.example.AuctionSite.entity.Product;
 import com.example.AuctionSite.entity.Role;
 import com.example.AuctionSite.entity.User;
 import com.example.AuctionSite.exception.AppException;
 import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.mapper.UserMapper;
+import com.example.AuctionSite.repository.ProductRepository;
 import com.example.AuctionSite.repository.RoleRepository;
 import com.example.AuctionSite.repository.UserRepository;
 import lombok.AccessLevel;
@@ -33,6 +35,7 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
+    ProductRepository productRepository;
     
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
         if (userRepository.existsByUsername(userCreateRequest.getUsername())) {
@@ -64,13 +67,6 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found")));
     }
     
-    public UserResponse getMyInfo() {
-        var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISTED));
-        return userMapper.toUserResponse(user);
-    }
-    
     @PreAuthorize("hasAuthority('UPDATE_USER')")
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -83,5 +79,27 @@ public class UserService {
     @PreAuthorize("hasAuthority('DELETE_USER')")
     public void deleteUser(String id) {
         userRepository.deleteById(id);
+    }
+    
+    public UserResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISTED));
+        return userMapper.toUserResponse(user);
+    }
+    
+    public String getUserId() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISTED));
+        return user.getId();
+    }
+    
+    public void addProductToUser(String userId, Integer productId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISTED));
+        Product product = productRepository.findById(productId).orElseThrow();
+        
+        user.getProducts().add(product);
+        userRepository.save(user);
     }
 }
