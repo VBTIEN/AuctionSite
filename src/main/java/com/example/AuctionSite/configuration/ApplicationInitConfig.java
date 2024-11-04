@@ -32,6 +32,7 @@ public class ApplicationInitConfig {
     CategoryRepository categoryRepository;
     NotificationRepository notificationRepository;
     StatusRepository statusRepository;
+    RanksRepository ranksRepository;
     
     @Bean
     ApplicationRunner applicationRunner() {
@@ -45,6 +46,7 @@ public class ApplicationInitConfig {
             initializeCategories();
             initializeNotifications();
             initializeStatus();
+            initializeRanks();
             createDefaultAdminUser();
         };
     }
@@ -115,6 +117,9 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_IMAGE","Update image permission");
         createPermissionIfNotExists("DELETE_IMAGE","Delete image permission");
         
+        createPermissionIfNotExists("ADD_FOLLOW_AUCTION","Add follow auction permission");
+        createPermissionIfNotExists("UNFOLLOW_AUCTION","Unfollow auction permission");
+        
         createPermissionIfNotExists("CREATE_COST","Create cost permission");
         createPermissionIfNotExists("GET_ALL_COSTS","Get all costs permission");
         createPermissionIfNotExists("GET_COST_BY_NAME","Get cost by name permission");
@@ -132,6 +137,13 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_BENEFIT_BY_NAME","Get benefit by name permission");
         createPermissionIfNotExists("UPDATE_BENEFIT","Update benefit permission");
         createPermissionIfNotExists("DELETE_BENEFIT","Delete benefit permission");
+        
+        createPermissionIfNotExists("CREATE_AUCTION","Create auction permission");
+        createPermissionIfNotExists("GET_ALL_AUCTIONS","Get all auctions permission");
+        createPermissionIfNotExists("GET_AUCTION_BY_ID","Get auction by id permission");
+        createPermissionIfNotExists("GET_AUCTION_BY_NAME","Get auction by name permission");
+        createPermissionIfNotExists("UPDATE_AUCTION","Update auction permission");
+        createPermissionIfNotExists("DELETE_AUCTION","Delete auction permission");
     }
     
     private void initializeRoles() {
@@ -197,6 +209,7 @@ public class ApplicationInitConfig {
     }
     
     private void initializeRates() {
+        createRateIfNotExists(0F,"Undetermined");
         createRateIfNotExists(0.5F,"Very poor");
         createRateIfNotExists(1F,"Least");
         createRateIfNotExists(1.5F,"Medium");
@@ -274,6 +287,7 @@ public class ApplicationInitConfig {
         
         createStatusIfNotExists("PENDING_APPROVAL", "Chờ duyệt");
         createStatusIfNotExists("PENDING_AUCTION", "Chờ đấu giá");
+        createStatusIfNotExists("ADDED", "Đã thêm");
         createStatusIfNotExists("ACTIVE", "Đang đấu giá");
         createStatusIfNotExists("SOLD", "Đã bán");
         createStatusIfNotExists("UNSOLD", "Không bán được");
@@ -285,6 +299,14 @@ public class ApplicationInitConfig {
         createStatusIfNotExists("ENDED", "Đã kết thúc");
         createStatusIfNotExists("COMPLETED", "Đã hoàn tất");
         createStatusIfNotExists("CANCELLED", "Hủy đấu giá");
+    }
+    
+    private void initializeRanks() {
+        createRankIfNotExists("BRONZE", "Hạng Đồng", 0, Duration.ZERO, 1);
+        createRankIfNotExists("SILVER", "Hạng Bạc", 1, Duration.ofMinutes(1), 2);
+        createRankIfNotExists("GOLD", "Hạng Vàng", 2, Duration.ofMinutes(2), 3);
+        createRankIfNotExists("PLATINUM", "Hạng Bạch Kim", 3, Duration.ofMinutes(3), 4);
+        createRankIfNotExists("DIAMOND", "Hạng Kim Cương", 4, Duration.ofMinutes(4), 5);
     }
     
     private void createDefaultAdminUser() {
@@ -417,6 +439,22 @@ public class ApplicationInitConfig {
                     .description(description)
                     .build();
                 statusRepository.save(status);
+            }
+        );
+    }
+    
+    private void createRankIfNotExists(String name, String description, Integer successfulTransactions, Duration membershipDuration, Integer activityFrequency) {
+        ranksRepository.findById(name).ifPresentOrElse(
+            ranks -> {},
+            () -> {
+                Ranks ranks = Ranks.builder()
+                    .name(name)
+                    .description(description)
+                    .successfulTransactions(successfulTransactions)
+                    .membershipDuration(membershipDuration)
+                    .activityFrequency(activityFrequency)
+                    .build();
+                ranksRepository.save(ranks);
             }
         );
     }

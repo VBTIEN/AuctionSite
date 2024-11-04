@@ -17,14 +17,16 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Auction {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String name;
     String description;
-    LocalDateTime timeStart;
-    String status;
+    LocalDateTime startTime;
     Integer finalCost;
     Integer numberOfBids;
+    
+    @ManyToOne
+    Status status;
     
     @OneToMany(mappedBy = "auction")
     @ToString.Exclude
@@ -46,7 +48,7 @@ public class Auction {
     @ManyToOne
     Step step;
     
-    @OneToMany(mappedBy = "auctions")
+    @OneToMany(mappedBy = "auction")
     @ToString.Exclude
     Set<Follow> follows;
 }

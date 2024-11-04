@@ -64,4 +64,11 @@ public class ProductController {
             .result("Product deleted")
             .build();
     }
+    
+    @GetMapping("/search")
+    ApiResponse<List<ProductResponse>> searchProductsByName(@RequestParam String name, @RequestParam(defaultValue = "30") int threshold) {
+        return ApiResponse.<List<ProductResponse>>builder()
+            .result(productService.searchProductsByName(name, threshold))
+            .build();
+    }
 }

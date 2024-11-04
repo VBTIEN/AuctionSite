@@ -25,6 +25,7 @@ public class User {
     String email;
     LocalDate dob;
     String fullName;
+    
     LocalDate joiningDate;
     LocalTime actionTime;
     Integer purchases;
@@ -54,11 +55,11 @@ public class User {
     @ToString.Exclude
     Set<Auction> auctions;
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     @ToString.Exclude
     Set<Bid> bids;
     
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     @ToString.Exclude
     Set<Follow> follows;
 }

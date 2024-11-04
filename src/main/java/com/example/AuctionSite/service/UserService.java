@@ -3,15 +3,11 @@ package com.example.AuctionSite.service;
 import com.example.AuctionSite.dto.request.UserCreateRequest;
 import com.example.AuctionSite.dto.request.UserUpdateRequest;
 import com.example.AuctionSite.dto.response.UserResponse;
-import com.example.AuctionSite.entity.Product;
-import com.example.AuctionSite.entity.Role;
-import com.example.AuctionSite.entity.User;
+import com.example.AuctionSite.entity.*;
 import com.example.AuctionSite.exception.AppException;
 import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.mapper.UserMapper;
-import com.example.AuctionSite.repository.ProductRepository;
-import com.example.AuctionSite.repository.RoleRepository;
-import com.example.AuctionSite.repository.UserRepository;
+import com.example.AuctionSite.repository.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,12 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -36,6 +31,8 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
     ProductRepository productRepository;
+    RateRepository rateRepository;
+    RanksRepository ranksRepository;
     
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
         if (userRepository.existsByUsername(userCreateRequest.getUsername())) {
@@ -47,7 +44,13 @@ public class UserService {
         Set<Role> role = new HashSet<>();
         role.add(roleRepository.findById("USER").orElseThrow());
         
+        Rate rate = rateRepository.findById(0F).orElseThrow();
+        
+        Ranks ranks = ranksRepository.findById("BRONZE").orElseThrow();
+        
         user.setRoles(role);
+        user.setRate(rate);
+        user.setRanks(ranks);
         user.setJoiningDate(LocalDate.now());
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -72,7 +75,10 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userMapper.toUpdateUser(user, userUpdateRequest);
         
-        user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+        if (userUpdateRequest.getPassword() != null && !userUpdateRequest.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+        }
+        
         return userMapper.toUserResponse(userRepository.save(user));
     }
     

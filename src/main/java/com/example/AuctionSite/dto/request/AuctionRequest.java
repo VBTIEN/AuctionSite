@@ -1,5 +1,6 @@
 package com.example.AuctionSite.dto.request;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,14 +19,18 @@ public class AuctionRequest {
     @NotBlank(message = "")
     String description;
     
-    @NotBlank(message = "")
-    LocalDateTime timeStart;
+    @FutureOrPresent(message = "")
+    LocalDateTime startTime;
     
+    @NotBlank(message = "")
     String time;
     
-    String product;
+    @NotBlank(message = "")
+    Integer product;
     
+    @NotBlank(message = "")
     String cost;
     
+    @NotBlank(message = "")
     String step;
 }

@@ -9,7 +9,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IntrospectRequest {
+public class FollowRequest {
     @NotBlank(message = "")
-    String token;
+    String userId;
+    
+    @NotBlank(message = "")
+    Integer auctionId;
 }

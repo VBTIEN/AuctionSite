@@ -14,10 +14,11 @@ import java.util.Set;
 public class AuctionResponse {
     String name;
     String description;
-    LocalDateTime timeStart;
-    String status;
+    LocalDateTime startTime;
     Integer finalCost;
     Integer numberOfBids;
+    
+    StatusResponse status;
     
     Set<BidResponse> bids;
     

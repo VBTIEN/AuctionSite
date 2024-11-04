@@ -18,5 +18,6 @@ public class RoleRequest {
     @NotBlank(message = "")
     String description;
     
+    @NotBlank(message = "")
     Set<String> permissions;
 }

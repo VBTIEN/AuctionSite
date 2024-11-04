@@ -31,7 +31,16 @@ public class SecurityConfig {
     @Value("${jwt.signerKey}")
     String signerKey;
     
-    String[] PUBLIC_ENDPOINTS={"/users/create_user","/authenticates/get_token","/authenticates/introspect_token"};
+    String[] PUBLIC_ENDPOINTS_POST = {
+        "/users/create_user",
+        "/authenticates/get_token",
+        "/authenticates/introspect_token",
+    };
+    
+    String[] PUBLIC_ENDPOINTS_GET = {
+        "/products/search",
+        "/auctions/search",
+    };
     
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -40,14 +49,17 @@ public class SecurityConfig {
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request ->
-            request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest().authenticated());
-        httpSecurity.oauth2ResourceServer(oauth2 ->
-            oauth2.jwt(jwtConfigurer ->
-                jwtConfigurer.decoder(jwtDecoder())
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
+        httpSecurity.authorizeHttpRequests(request -> request
+            .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
+            .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+            .anyRequest().authenticated());
+        
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
+            .jwt(jwtConfigurer -> jwtConfigurer
+                .decoder(jwtDecoder())
+                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+            .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
+        
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }

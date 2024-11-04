@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.Set;
 
 @Entity
@@ -19,9 +19,12 @@ public class Ranks {
     @Id
     String name;
     String description;
-    LocalTime rankTime;
-    Integer rankPurchases;
-    Integer rankSales;
+    // Tổng số lần người dùng mua hoặc bán thành công sản phẩm
+    Integer successfulTransactions;
+    // Thời gian người dùng đã tham gia vào website, tính bằng ngày
+    Duration membershipDuration;
+    // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
+    Integer activityFrequency;
     
     @ManyToMany
     @ToString.Exclude

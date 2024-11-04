@@ -1,5 +1,6 @@
 package com.example.AuctionSite.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,7 +9,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FollowResponse {
-    UserResponse users;
-    AuctionResponse auctions;
+    String followed;
+    String followed_by;
 }

@@ -1,5 +1,6 @@
 package com.example.AuctionSite.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,8 +19,12 @@ public class Follow {
     Integer id;
     
     @ManyToOne
-    User users;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    User user;
     
     @ManyToOne
-    Auction auctions;
+    @JoinColumn(name = "auction_id", referencedColumnName = "id")
+    @JsonIgnore
+    Auction auction;
 }

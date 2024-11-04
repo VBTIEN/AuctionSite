@@ -42,8 +42,8 @@ public class AuctionController {
     }
     
     @GetMapping("/get_auction_by_name/{auctionName}")
-    ApiResponse<AuctionResponse> getAuctionByName(@PathVariable("auctionName") String auctionName) {
-        return ApiResponse.<AuctionResponse>builder()
+    ApiResponse<List<AuctionResponse>> getAuctionByName(@PathVariable("auctionName") String auctionName) {
+        return ApiResponse.<List<AuctionResponse>>builder()
             .result(auctionService.getAuctionByName(auctionName))
             .build();
     }
@@ -60,6 +60,13 @@ public class AuctionController {
         auctionService.deleteAuction(auctionid);
         return ApiResponse.<String>builder()
             .result("Auction deleted")
+            .build();
+    }
+    
+    @GetMapping("/search")
+    ApiResponse<List<AuctionResponse>> searchAuctionsByName(@RequestParam String name, @RequestParam(defaultValue = "30") int threshold) {
+        return ApiResponse.<List<AuctionResponse>>builder()
+            .result(auctionService.searchAuctionsByName(name, threshold))
             .build();
     }
 }

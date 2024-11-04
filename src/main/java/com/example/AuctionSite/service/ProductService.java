@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class ProductService {
     public ProductResponse createProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
         Product product = productMapper.toProduct(productRequest);
         
-        Status status = statusRepository.findById("PENDING_AUCTION").orElseThrow();
+        Status status = statusRepository.findById("ADDED").orElseThrow();
         product.setStatus(status);
         
         var categories = categoryRepository.findAllById(productRequest.getCategories());
@@ -143,5 +144,16 @@ public class ProductService {
         jdbcTemplate.update(deleteUserProductQuery, id);
         
         productRepository.delete(product);
+    }
+    
+    public List<ProductResponse> searchProductsByName(String name, int threshold) {
+        List<Product> products = productRepository.findAll();
+        List<Product> filteredProducts = products.stream()
+            .filter(product -> FuzzySearch.ratio(product.getName(), name) >= threshold)
+            .toList();
+        
+        return filteredProducts.stream()
+            .map(productMapper::toProductResponse)
+            .collect(Collectors.toList());
     }
 }

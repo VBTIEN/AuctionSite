@@ -20,7 +20,9 @@ public class ProductRequest {
     @NotBlank(message = "")
     String description;
     
+    @NotBlank(message = "")
     Set<String> categories;
+    
     
     List<MultipartFile> images;
 }
