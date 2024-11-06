@@ -1,11 +1,12 @@
 package com.example.AuctionSite.dto.request;
 
+import java.time.Duration;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.Duration;
 
 @Data
 @Builder
@@ -13,10 +14,10 @@ import java.time.Duration;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeRequest {
-    @NotBlank(message = "")
-    @Size(max = 50, message = "")
+    @NotBlank(message = "TIMENAME_BLANK")
+    @Size(max = 50, message = "TIMENAME_INVALID_SIZE")
     String name;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "TIME_BLANK")
     Duration time;
 }

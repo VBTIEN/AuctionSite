@@ -1,5 +1,7 @@
 package com.example.AuctionSite.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,6 +11,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationRequest {
+    @NotBlank(message = "USERNAME_BLANK")
     String username;
+
+    @NotBlank(message = "PASSWORD_BLANK")
     String password;
 }

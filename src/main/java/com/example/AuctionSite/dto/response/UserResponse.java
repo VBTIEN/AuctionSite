@@ -1,15 +1,13 @@
 package com.example.AuctionSite.dto.response;
 
-import com.example.AuctionSite.entity.*;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
+
+import com.example.AuctionSite.entity.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -17,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
+    String id;
     String username;
     String password;
     String email;
@@ -28,20 +27,20 @@ public class UserResponse {
     Integer sales;
     Integer sumOfRate;
     Integer numberOfRate;
-    
+
     Set<RoleResponse> roles;
-    
+
     RanksResponse ranks;
-    
+
     RateResponse rate;
-    
+
     Set<ProductResponse> products;
-    
+
     Set<NotificationResponse> notifications;
-    
+
     Set<AuctionResponse> auctions;
-    
+
     Set<BidResponse> bids;
-    
+
     Set<FollowResponse> follows;
 }

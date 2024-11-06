@@ -1,9 +1,9 @@
 package com.example.AuctionSite.dto.response;
 
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -12,10 +12,10 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BidResponse {
     Integer bidMount;
-    
+
     UserResponse user;
-    
+
     AuctionResponse auction;
-    
+
     Set<NotificationResponse> notifications;
 }

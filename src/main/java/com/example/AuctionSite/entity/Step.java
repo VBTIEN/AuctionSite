@@ -1,11 +1,12 @@
 package com.example.AuctionSite.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -18,5 +19,6 @@ import java.math.BigDecimal;
 public class Step {
     @Id
     String name;
+
     BigDecimal step;
 }

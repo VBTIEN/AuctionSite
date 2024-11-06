@@ -1,11 +1,12 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.Duration;
 import java.util.Set;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -18,6 +19,7 @@ import java.util.Set;
 public class Ranks {
     @Id
     String name;
+
     String description;
     // Tổng số lần người dùng mua hoặc bán thành công sản phẩm
     Integer successfulTransactions;
@@ -25,11 +27,11 @@ public class Ranks {
     Duration membershipDuration;
     // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
     Integer activityFrequency;
-    
+
     @ManyToMany
     @ToString.Exclude
     Set<Benefit> benefits;
-    
+
     @OneToMany
     @ToString.Exclude
     Set<User> users;

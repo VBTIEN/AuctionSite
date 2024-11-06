@@ -3,7 +3,7 @@ package com.example.AuctionSite.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.AuctionSite.entity.Category;
+import com.example.AuctionSite.entity.InvalidatedToken;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, String> {}
+public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedToken, String> {}

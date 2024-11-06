@@ -1,10 +1,12 @@
 package com.example.AuctionSite.dto.request;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -12,9 +14,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CostRequest {
-    @NotBlank(message = "")
+    @NotBlank(message = "COSTNAME_BLANK")
+    @Size(max = 50, message = "COSTNAME_INVALID_SIZE")
     String name;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "STARTCOST_BLANK")
     BigDecimal startCost;
 }

@@ -1,6 +1,6 @@
 package com.example.AuctionSite.dto.request;
 
-import java.time.LocalDate;
+import jakarta.validation.constraints.NotBlank;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,10 +10,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
-    String username;
-    String password;
-    String email;
-    LocalDate dob;
-    String fullName;
+public class RefreshRequest {
+    @NotBlank(message = "TOKEN_BLANK")
+    String token;
 }

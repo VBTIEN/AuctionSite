@@ -1,6 +1,6 @@
 package com.example.AuctionSite.dto.response;
 
-import java.time.Duration;
+import java.util.List;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,7 +10,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TimeResponse {
-    String name;
-    Duration time;
+public class AuctionPageResponse {
+    List<AuctionResponse> auctions;
+    int totalPages;
+    long totalElements;
 }

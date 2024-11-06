@@ -1,10 +1,10 @@
 package com.example.AuctionSite.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.Duration;
 import java.util.Set;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -20,6 +20,6 @@ public class RanksResponse {
     Duration membershipDuration;
     // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
     Integer activityFrequency;
-    
+
     Set<BenefitResponse> benefits;
 }

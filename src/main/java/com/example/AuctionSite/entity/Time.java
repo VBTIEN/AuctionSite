@@ -1,11 +1,12 @@
 package com.example.AuctionSite.entity;
 
+import java.time.Duration;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.Duration;
 
 @Entity
 @Getter
@@ -18,5 +19,6 @@ import java.time.Duration;
 public class Time {
     @Id
     String name;
+
     Duration time;
 }

@@ -1,5 +1,7 @@
 package com.example.AuctionSite.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -14,9 +16,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class InvalidatedToken {
     @Id
-    String name;
+    String id;
 
-    String description;
+    Date expiryTime;
 }

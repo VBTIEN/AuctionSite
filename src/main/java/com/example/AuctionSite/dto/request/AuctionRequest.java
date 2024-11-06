@@ -1,11 +1,13 @@
 package com.example.AuctionSite.dto.request;
 
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,24 +15,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuctionRequest {
-    @NotBlank(message = "")
+    @NotBlank(message = "AUCTIONNAME_BLANK")
+    @Size(max = 50, message = "AUCTIONNAME_INVALID_SIZE")
     String name;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "AUCTION_DESCRIPTION_BLANK")
     String description;
-    
-    @FutureOrPresent(message = "")
+
+    @FutureOrPresent(message = "STARTTIME_NOT_IN_FUTURE_OR_PRESENT")
     LocalDateTime startTime;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "AUCTION_TIME_BLANK")
     String time;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "AUCTION_PRODUCT_BLANK")
     Integer product;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "AUCTION_COST_BLANK")
     String cost;
-    
-    @NotBlank(message = "")
+
+    @NotBlank(message = "AUCTION_STEP_BLANK")
     String step;
 }

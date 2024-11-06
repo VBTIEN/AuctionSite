@@ -1,9 +1,9 @@
 package com.example.AuctionSite.dto.response;
 
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -13,10 +13,10 @@ import java.util.Set;
 public class ProductResponse {
     String name;
     String description;
-    
+
     StatusResponse status;
-    
+
     Set<CategoryResponse> categories;
-    
+
     Set<ImageResponse> images;
 }

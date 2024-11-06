@@ -1,13 +1,13 @@
 package com.example.AuctionSite.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Entity
 @Getter
@@ -20,8 +20,9 @@ import java.util.Set;
 public class Rate {
     @Id
     Float numberOfStar;
+
     String description;
-    
+
     @OneToMany
     @ToString.Exclude
     Set<User> users;

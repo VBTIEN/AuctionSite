@@ -1,10 +1,10 @@
 package com.example.AuctionSite.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -17,20 +17,20 @@ public class AuctionResponse {
     LocalDateTime startTime;
     Integer finalCost;
     Integer numberOfBids;
-    
+
     StatusResponse status;
-    
+
     Set<BidResponse> bids;
-    
+
     TimeResponse time;
-    
+
     Set<NotificationResponse> notifications;
-    
+
     ProductResponse product;
-    
+
     CostResponse cost;
-    
+
     StepResponse step;
-    
+
     Set<FollowResponse> follows;
 }
