@@ -136,6 +136,11 @@ public class AuthenticationService {
         return signedJWT;
     }
 
+    public String extractUsername(String token) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(token, false);
+        return signedJWT.getJWTClaimsSet().getSubject();
+    }
+
     String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()

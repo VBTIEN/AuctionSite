@@ -3,11 +3,13 @@ package com.example.AuctionSite.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import com.example.AuctionSite.dto.request.AuctionRequest;
 import com.example.AuctionSite.dto.response.AuctionPageResponse;
 import com.example.AuctionSite.dto.response.AuctionResponse;
 import com.example.AuctionSite.entity.*;
+import com.example.AuctionSite.exception.AppException;
+import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.mapper.AuctionMapper;
 import com.example.AuctionSite.repository.*;
 
@@ -40,17 +44,29 @@ public class AuctionService {
     StatusRepository statusRepository;
     FollowRepository followRepository;
     UserService userService;
+    UserRepository userRepository;
+    JdbcTemplate jdbcTemplate;
 
     @PreAuthorize("hasAuthority('CREATE_AUCTION')")
     public AuctionResponse createAuction(AuctionRequest auctionRequest) {
-        Auction auction = auctionMapper.toAuction(auctionRequest);
-        Time time = timeRepository
-                .findById(auctionRequest.getTime())
-                .orElseThrow(() -> new RuntimeException("Time not found"));
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
 
         Product product = productRepository
                 .findById(auctionRequest.getProduct())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        boolean isProductOwnedByUser = user.getProducts().contains(product);
+        if (!isProductOwnedByUser) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_OF_USER);
+        }
+
+        Auction auction = auctionMapper.toAuction(auctionRequest);
+
+        Time time = timeRepository
+                .findById(auctionRequest.getTime())
+                .orElseThrow(() -> new RuntimeException("Time not found"));
+
         product.setStatus(statusRepository
                 .findById("PENDING_AUCTION")
                 .orElseThrow(() -> new RuntimeException("Status not found")));
@@ -71,7 +87,6 @@ public class AuctionService {
         auction.setStatus(status);
         auctionRepository.save(auction);
 
-        String userId = userService.getUserId();
         userService.addAuctionToUser(userId, auction.getId());
 
         return auctionMapper.toAuctionResponse(auction);
@@ -98,7 +113,24 @@ public class AuctionService {
 
     @PreAuthorize("hasAuthority('UPDATE_AUCTION')")
     public AuctionResponse updateAuction(Integer id, AuctionRequest auctionRequest) {
-        Auction auction = auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not found"));
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        boolean isAdmin =
+                user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
+
+        Auction auction;
+        if (isAdmin) {
+            auction = auctionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
+        } else {
+            auction = user.getAuctions().stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_OF_USER));
+        }
+
+        // Auction auction = auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not
+        // found"));
         auctionMapper.toUpdateAuction(auction, auctionRequest);
         Time time = timeRepository
                 .findById(auctionRequest.getTime())
@@ -130,7 +162,21 @@ public class AuctionService {
 
     @PreAuthorize("hasAuthority('DELETE_AUCTION')")
     public void deleteAuction(Integer id) {
-        Auction auction = auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not found"));
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        boolean isAdmin =
+                user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
+
+        Auction auction;
+        if (isAdmin) {
+            auction = auctionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
+        } else {
+            auction = user.getAuctions().stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_OF_USER));
+        }
 
         List<Follow> follows = followRepository.findByAuctionId(id);
         followRepository.deleteAll(follows);
@@ -140,6 +186,9 @@ public class AuctionService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         product.setStatus(
                 statusRepository.findById("SUSPENDED").orElseThrow(() -> new RuntimeException("Status not found")));
+
+        String deleteUserAuctionQuery = "DELETE FROM user_auctions WHERE auctions_id = ?";
+        jdbcTemplate.update(deleteUserAuctionQuery, id);
 
         auctionRepository.deleteById(id);
     }
@@ -277,5 +326,49 @@ public class AuctionService {
                 .totalPages(auctionPage.getTotalPages())
                 .totalElements(auctionPage.getTotalElements())
                 .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_BY_USERID')")
+    public List<AuctionResponse> getAllAuctionsByUserId(String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Set<Auction> auctions = user.getAuctions();
+        return auctions.stream().map(auctionMapper::toAuctionResponse).toList();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_OF_USER')")
+    public List<AuctionResponse> getAllAuctionsOfUser() {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Auction> auctions = user.getAuctions();
+        return auctions.stream().map(auctionMapper::toAuctionResponse).toList();
+    }
+
+    @PreAuthorize("hasAuthority('GET_AUCTION_BY_ID_OF_USER')")
+    public AuctionResponse getAuctionByIdOfUser(Integer id) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Auction auction = user.getAuctions().stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_OF_USER));
+        return auctionMapper.toAuctionResponse(auction);
+    }
+
+    @PreAuthorize("hasAuthority('GET_AUCTION_BY_NAME_OF_USER')")
+    public List<AuctionResponse> getAuctionByNameOfUser(String name) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        List<AuctionResponse> auctions = user.getAuctions().stream()
+                .filter(auction -> auction.getName().equalsIgnoreCase(name))
+                .map(auctionMapper::toAuctionResponse)
+                .toList();
+
+        if (auctions.isEmpty()) {
+            throw new AppException(ErrorCode.AUCTION_NOT_OF_USER);
+        }
+        return auctions;
     }
 }

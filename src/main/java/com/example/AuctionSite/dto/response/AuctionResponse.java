@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuctionResponse {
+    Integer id;
     String name;
     String description;
     LocalDateTime startTime;

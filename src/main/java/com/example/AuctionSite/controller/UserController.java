@@ -1,5 +1,6 @@
 package com.example.AuctionSite.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -11,7 +12,13 @@ import com.example.AuctionSite.dto.request.UserCreateRequest;
 import com.example.AuctionSite.dto.request.UserUpdateRequest;
 import com.example.AuctionSite.dto.response.ApiResponse;
 import com.example.AuctionSite.dto.response.UserResponse;
+import com.example.AuctionSite.entity.User;
+import com.example.AuctionSite.exception.AppException;
+import com.example.AuctionSite.exception.ErrorCode;
+import com.example.AuctionSite.repository.UserRepository;
+import com.example.AuctionSite.service.AuthenticationService;
 import com.example.AuctionSite.service.UserService;
+import com.nimbusds.jose.JOSEException;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +32,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserController {
     UserService userService;
+    UserRepository userRepository;
+    AuthenticationService authenticationService;
 
-    @PostMapping("/create_user")
+    @PostMapping("/register")
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(userCreateRequest))
@@ -66,14 +75,32 @@ public class UserController {
 
     @PutMapping("/update_user/{id}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable("id") String id, @RequestBody UserUpdateRequest userUpdateRequest) {
+            @PathVariable("id") String id,
+            @RequestBody UserUpdateRequest userUpdateRequest,
+            @RequestHeader("Authorization") String token)
+            throws ParseException, JOSEException {
+        String username = authenticationService.extractUsername(token.replace("Bearer ", ""));
+
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!user.getUsername().equals(username) && !"admin".equals(username)) {
+            throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
+        }
+
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userUpdateRequest, id))
                 .build();
     }
 
     @DeleteMapping("/delete_user/{id}")
-    ApiResponse<String> deleteUser(@PathVariable("id") String id) {
+    ApiResponse<String> deleteUser(@PathVariable("id") String id, @RequestHeader("Authorization") String token)
+            throws ParseException, JOSEException {
+        String username = authenticationService.extractUsername(token.replace("Bearer ", ""));
+
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!user.getUsername().equals(username) && !"admin".equals(username)) {
+            throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
+        }
+
         userService.deleteUser(id);
         return ApiResponse.<String>builder().result("User deleted").build();
     }

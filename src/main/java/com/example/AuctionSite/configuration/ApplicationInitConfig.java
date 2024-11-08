@@ -57,8 +57,8 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_ALL_USERS", "Get all users permission");
         createPermissionIfNotExists("GET_USER_BY_ID", "Get user by id permission");
         createPermissionIfNotExists("GET_USER_BY_USERNAME", "Get user by username permission");
-        createPermissionIfNotExists("UPDATE_USER", "Update user permission");
-        createPermissionIfNotExists("DELETE_USER", "Delete user permission");
+        createPermissionIfNotExists("UPDATE_USER", "Update user permission"); // USER
+        createPermissionIfNotExists("DELETE_USER", "Delete user permission"); // USER
 
         createPermissionIfNotExists("CREATE_TIME", "Create time permission");
         createPermissionIfNotExists("GET_ALL_TIMES", "Get all times permission");
@@ -95,12 +95,16 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_RANK", "Update rank permission");
         createPermissionIfNotExists("DELETE_RANK", "Delete rank permission");
 
-        createPermissionIfNotExists("CREATE_PRODUCT", "Create product permission");
+        createPermissionIfNotExists("CREATE_PRODUCT", "Create product permission"); // USER
         createPermissionIfNotExists("GET_ALL_PRODUCTS", "Get all products permission");
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_BY_USERID", "Get all products permission");
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_OF_USER", "Get all products of user permission"); // USER
         createPermissionIfNotExists("GET_PRODUCT_BY_ID", "Get product by id permission");
+        createPermissionIfNotExists("GET_PRODUCT_BY_ID_OF_USER", "Get product by id of user permission"); // USER
         createPermissionIfNotExists("GET_PRODUCT_BY_NAME", "Get product by name permission");
-        createPermissionIfNotExists("UPDATE_PRODUCT", "Update product permission");
-        createPermissionIfNotExists("DELETE_PRODUCT", "Delete product permission");
+        createPermissionIfNotExists("GET_PRODUCT_BY_NAME_OF_USER", "Get product by name of user permission"); // USER
+        createPermissionIfNotExists("UPDATE_PRODUCT", "Update product permission"); // USER
+        createPermissionIfNotExists("DELETE_PRODUCT", "Delete product permission"); // USER
 
         createPermissionIfNotExists("CREATE_PERMISSION", "Create permission permission");
         createPermissionIfNotExists("GET_ALL_PERMISSIONS", "Get all permissions permission");
@@ -119,8 +123,11 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_IMAGE", "Update image permission");
         createPermissionIfNotExists("DELETE_IMAGE", "Delete image permission");
 
-        createPermissionIfNotExists("ADD_FOLLOW_AUCTION", "Add follow auction permission");
-        createPermissionIfNotExists("UNFOLLOW_AUCTION", "Unfollow auction permission");
+        createPermissionIfNotExists("ADD_FOLLOW_AUCTION", "Add follow auction permission"); // USER
+        createPermissionIfNotExists("UNFOLLOW_AUCTION", "Unfollow auction permission"); // USER
+        createPermissionIfNotExists("GET_ALL_FOLLOW_BY_USERID", "Get all follows by userId permission");
+        createPermissionIfNotExists("GET_ALL_FOLLOW_BY_AUCTIONID", "Get all follows by auctionId permission");
+        createPermissionIfNotExists("GET_ALL_FOLLOW_OF_USER", "Get all follows of user permission"); // USER
 
         createPermissionIfNotExists("CREATE_COST", "Create cost permission");
         createPermissionIfNotExists("GET_ALL_COSTS", "Get all costs permission");
@@ -140,12 +147,16 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_BENEFIT", "Update benefit permission");
         createPermissionIfNotExists("DELETE_BENEFIT", "Delete benefit permission");
 
-        createPermissionIfNotExists("CREATE_AUCTION", "Create auction permission");
+        createPermissionIfNotExists("CREATE_AUCTION", "Create auction permission"); // USER
         createPermissionIfNotExists("GET_ALL_AUCTIONS", "Get all auctions permission");
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_BY_USERID", "Get all products permission");
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_OF_USER", "Get all auctions of user permission"); // USER
         createPermissionIfNotExists("GET_AUCTION_BY_ID", "Get auction by id permission");
+        createPermissionIfNotExists("GET_AUCTION_BY_ID_OF_USER", "Get auction by id of user permission"); // USER
         createPermissionIfNotExists("GET_AUCTION_BY_NAME", "Get auction by name permission");
-        createPermissionIfNotExists("UPDATE_AUCTION", "Update auction permission");
-        createPermissionIfNotExists("DELETE_AUCTION", "Delete auction permission");
+        createPermissionIfNotExists("GET_AUCTION_BY_NAME_OF_USER", "Get auction by name of user permission"); // USER
+        createPermissionIfNotExists("UPDATE_AUCTION", "Update auction permission"); // USER
+        createPermissionIfNotExists("DELETE_AUCTION", "Delete auction permission"); // USER
     }
 
     private void initializeRoles() {
@@ -261,50 +272,37 @@ public class ApplicationInitConfig {
     }
 
     private void initializeNotifications() {
-        createNotificationIfNotExists(
-                "NEW_AUCTION_NOTICE", "Phiên đấu giá mới đã bắt đầu! Đừng bỏ lỡ cơ hội sở hữu sản phẩm này.");
+        // spotless:off
+        //User
+        createNotificationIfNotExists("PROMOTIONAL_NOTICE", "Khuyến mãi đặc biệt! Nhập mã khuyến mãi để nhận ưu đãi khi tham gia đấu giá. Thời gian có hạn, đừng bỏ lỡ!");
+        createNotificationIfNotExists("REGISTRATION_SUCCESSFUL_NOTIFICATION", "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản và bắt đầu trải nghiệm.");
+        createNotificationIfNotExists("ACCOUNT_VERIFICATION_NOTICE", "Vui lòng xác thực tài khoản qua liên kết trong email để hoàn tất quá trình đăng ký.");
+        createNotificationIfNotExists("SUCCESSFUL_LOGIN_NOTIFICATION_AGAIN", "Bạn đã đăng nhập thành công. Chào mừng bạn quay trở lại!");
+        createNotificationIfNotExists("SUCCESSFUL_LOGIN_NOTIFICATION", "Bạn đã đăng nhập thành công!");
+        createNotificationIfNotExists("LOGIN_FAILED_MESSAGE", "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin hoặc xác thực tài khoản.");
+        createNotificationIfNotExists("FORGTO_PASSWORD_NOTICE", "Yêu cầu khôi phục mật khẩu thành công! Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.");
+        createNotificationIfNotExists("PASSWORD_CHANGE_SUCCESSFUL_NOTIFICATION", "Mật khẩu của bạn đã được thay đổi thành công. Vui lòng sử dụng mật khẩu mới để đăng nhập.");
+        createNotificationIfNotExists("LOGOUT_NOTICE", "Bạn đã đăng xuất thành công. Hẹn gặp lại!");
+        createNotificationIfNotExists("PERSONAL_INFORMATION_UPDATE_NOTICE", "Thông tin cá nhân của bạn đã được cập nhật thành công.");
+        //Auction
+        createNotificationIfNotExists("NEW_AUCTION_NOTICE", "Phiên đấu giá mới đã bắt đầu! Đừng bỏ lỡ cơ hội sở hữu sản phẩm này.");
         createNotificationIfNotExists("AUCTION_END_NOTICE", "Phiên đấu giá đã kết thúc.");
         createNotificationIfNotExists("CONGRATULATION_NOTICE", "Xin chúc mừng! Bạn đã thắng phiên đấu giá.");
-        createNotificationIfNotExists(
-                "HIGHEST_BID_NOTICE", "Bạn đang là người đặt giá cao nhất. Tiếp tục theo dõi để không bị vượt qua!");
-        createNotificationIfNotExists(
-                "OVERPRICED_NOTICE",
-                "Giá bạn đã đặt đã bị vượt qua. Đặt giá cao hơn để tiếp tục tham gia phiên đấu giá.");
+        createNotificationIfNotExists("DELIVERY_NOTICE", "Đơn hàng của bạn đang được xử lý và sẽ sớm được giao. Cảm ơn bạn đã tham gia đấu giá!");
+        //Bid
+        createNotificationIfNotExists("HIGHEST_BID_NOTICE", "Bạn đang là người đặt giá cao nhất. Tiếp tục theo dõi để không bị vượt qua!");
+        createNotificationIfNotExists("OVERPRICED_NOTICE", "Giá bạn đã đặt đã bị vượt qua. Đặt giá cao hơn để tiếp tục tham gia phiên đấu giá.");
         createNotificationIfNotExists("BID_CONFIRMATION_NOTICE", "Giá của bạn đã được xác nhận thành công.");
+        createNotificationIfNotExists("NOTICE_OF_VIOLATION", "Bạn đã vi phạm quy định đấu giá. Vui lòng tuân thủ quy định để tránh bị khóa tài khoản.");
+        //Payment
         createNotificationIfNotExists("PAYMENT_NOTICE", "Vui lòng hoàn tất thanh toán để nhận hàng.");
-        createNotificationIfNotExists(
-                "DELIVERY_NOTICE",
-                "Đơn hàng của bạn đang được xử lý và sẽ sớm được giao. Cảm ơn bạn đã tham gia đấu giá!");
-        createNotificationIfNotExists(
-                "NOTICE_OF_VIOLATION",
-                "Bạn đã vi phạm quy định đấu giá. Vui lòng tuân thủ quy định để tránh bị khóa tài khoản.");
-        createNotificationIfNotExists(
-                "PROMOTIONAL_NOTICE",
-                "Khuyến mãi đặc biệt! Nhập mã khuyến mãi để nhận ưu đãi khi tham gia đấu giá. Thời gian có hạn, đừng bỏ lỡ!");
-        createNotificationIfNotExists(
-                "REGISTRATION_SUCCESSFUL_NOTIFICATION",
-                "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản và bắt đầu trải nghiệm.");
-        createNotificationIfNotExists(
-                "ACCOUNT_VERIFICATION_NOTICE",
-                "Vui lòng xác thực tài khoản qua liên kết trong email để hoàn tất quá trình đăng ký.");
-        createNotificationIfNotExists(
-                "SUCCESSFUL_LOGIN_NOTIFICATION_AGAIN", "Bạn đã đăng nhập thành công. Chào mừng bạn quay trở lại!");
-        createNotificationIfNotExists("SUCCESSFUL_LOGIN_NOTIFICATION", "Bạn đã đăng nhập thành công!");
-        createNotificationIfNotExists(
-                "LOGIN_FAILED_MESSAGE",
-                "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin hoặc xác thực tài khoản.");
-        createNotificationIfNotExists(
-                "FORGTO_PASSWORD_NOTICE",
-                "Yêu cầu khôi phục mật khẩu thành công! Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.");
-        createNotificationIfNotExists(
-                "PASSWORD_CHANGE_SUCCESSFUL_NOTIFICATION",
-                "Mật khẩu của bạn đã được thay đổi thành công. Vui lòng sử dụng mật khẩu mới để đăng nhập.");
-        createNotificationIfNotExists("LOGOUT_NOTICE", "Bạn đã đăng xuất thành công. Hẹn gặp lại!");
-        createNotificationIfNotExists(
-                "PERSONAL_INFORMATION_UPDATE_NOTICE", "Thông tin cá nhân của bạn đã được cập nhật thành công.");
+        //Bag
+        
+        //spotless:on
     }
 
     private void initializeStatus() {
+        // User
         createStatusIfNotExists("ONLINE", "Đang hoạt động");
         createStatusIfNotExists("LOGGED_IN", "Đã đăng nhập");
         createStatusIfNotExists("LOGGED_OUT", "Đã đăng xuất");
@@ -368,6 +366,31 @@ public class ApplicationInitConfig {
             if ("ADMIN".equals(roleName)) {
                 HashSet<Permission> permissions = new HashSet<>(permissionRepository.findAll());
                 role.setPermissions(permissions);
+            } else if ("USER".equals(roleName)) {
+                // spotless:off
+                HashSet<Permission> permissions = new HashSet<>();
+                permissions.add(permissionRepository.findById("UPDATE_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("DELETE_USER").orElseThrow());
+
+                permissions.add(permissionRepository.findById("CREATE_PRODUCT").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_PRODUCT_BY_ID_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_PRODUCT_BY_NAME_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("UPDATE_PRODUCT").orElseThrow());
+                permissions.add(permissionRepository.findById("DELETE_PRODUCT").orElseThrow());
+
+                permissions.add(permissionRepository.findById("CREATE_AUCTION").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_AUCTION_BY_ID_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_AUCTION_BY_NAME_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("UPDATE_AUCTION").orElseThrow());
+                permissions.add(permissionRepository.findById("DELETE_AUCTION").orElseThrow());
+
+                permissions.add(permissionRepository.findById("ADD_FOLLOW_AUCTION").orElseThrow());
+                permissions.add(permissionRepository.findById("UNFOLLOW_AUCTION").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_FOLLOW_OF_USER").orElseThrow());
+                role.setPermissions(permissions);
+                //spotless:on
             }
             roleRepository.save(role);
         });

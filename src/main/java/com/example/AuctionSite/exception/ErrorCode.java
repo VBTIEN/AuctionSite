@@ -67,6 +67,8 @@ public enum ErrorCode {
     PRODUCTNAME_INVALID_SIZE(801, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
     PRODUCT_DESCRIPTION_BLANK(802, "Description must be at most 50 characters", HttpStatus.BAD_REQUEST),
     PRODUCT_CATEGORIES_BLANK(803, "Category must be not blank", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_OF_USER(804, "Product not yours", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND(805, "Product not found", HttpStatus.NOT_FOUND),
     // Permission
     PERMISSIONNAME_BLANK(900, "Name must be not blank", HttpStatus.BAD_REQUEST),
     PERMISSIONNAME_INVALID_SIZE(901, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -98,6 +100,11 @@ public enum ErrorCode {
     AUCTION_PRODUCT_BLANK(1505, "Product must be not blank", HttpStatus.BAD_REQUEST),
     AUCTION_COST_BLANK(1506, "Cost must be not blank", HttpStatus.BAD_REQUEST),
     AUCTION_STEP_BLANK(1507, "Step must be not blank", HttpStatus.BAD_REQUEST),
+    AUCTION_NOT_FOUND(1508, "Auction not found", HttpStatus.NOT_FOUND),
+    AUCTION_NOT_OF_USER(1509, "Auction not yours", HttpStatus.BAD_REQUEST),
+    // Follow
+    FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED(1600, "Follow not found or you not permission", HttpStatus.NOT_FOUND),
+    FOLLOW_NOT_FOUND_OR_NOT_FOLLOW(1601, "Follow not found or not follow", HttpStatus.NOT_FOUND),
     ;
     int code;
     String message;

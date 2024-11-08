@@ -28,7 +28,7 @@ public class SecurityConfig {
     CustomJwtDecoder customJwtDecoder;
 
     String[] PUBLIC_ENDPOINTS_POST = {
-        "/users/create_user",
+        "/users/register",
         "/authenticates/login",
         "/authenticates/logout",
         "/authenticates/refresh",

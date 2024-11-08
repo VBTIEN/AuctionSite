@@ -125,4 +125,32 @@ public class AuctionController {
                 .result(auctionService.getAllAuctionsEndedPaged(page, size))
                 .build();
     }
+
+    @GetMapping("/get_all_auctions_by_userid/{userid}")
+    ApiResponse<List<AuctionResponse>> getAllAuctionsByUserId(@PathVariable("userid") String userid) {
+        return ApiResponse.<List<AuctionResponse>>builder()
+                .result(auctionService.getAllAuctionsByUserId(userid))
+                .build();
+    }
+
+    @GetMapping("/get_all_auctions_of_user")
+    ApiResponse<List<AuctionResponse>> getAllAuctionsOfUser() {
+        return ApiResponse.<List<AuctionResponse>>builder()
+                .result(auctionService.getAllAuctionsOfUser())
+                .build();
+    }
+
+    @GetMapping("/get_auction_by_id_of_user/{id}")
+    ApiResponse<AuctionResponse> getAuctionByIdOfUser(@PathVariable("id") Integer id) {
+        return ApiResponse.<AuctionResponse>builder()
+                .result(auctionService.getAuctionByIdOfUser(id))
+                .build();
+    }
+
+    @GetMapping("/get_auction_by_name_of_user/{name}")
+    ApiResponse<List<AuctionResponse>> getAuctionByNameOfUser(@PathVariable("name") String name) {
+        return ApiResponse.<List<AuctionResponse>>builder()
+                .result(auctionService.getAuctionByNameOfUser(name))
+                .build();
+    }
 }

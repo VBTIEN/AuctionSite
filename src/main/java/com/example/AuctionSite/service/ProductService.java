@@ -20,11 +20,11 @@ import com.example.AuctionSite.dto.response.ProductResponse;
 import com.example.AuctionSite.entity.Image;
 import com.example.AuctionSite.entity.Product;
 import com.example.AuctionSite.entity.Status;
+import com.example.AuctionSite.entity.User;
+import com.example.AuctionSite.exception.AppException;
+import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.mapper.ProductMapper;
-import com.example.AuctionSite.repository.CategoryRepository;
-import com.example.AuctionSite.repository.ImageRepository;
-import com.example.AuctionSite.repository.ProductRepository;
-import com.example.AuctionSite.repository.StatusRepository;
+import com.example.AuctionSite.repository.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +45,7 @@ public class ProductService {
     StatusRepository statusRepository;
     UserService userService;
     JdbcTemplate jdbcTemplate;
+    UserRepository userRepository;
 
     @PreAuthorize("hasAuthority('CREATE_PRODUCT')")
     public ProductResponse createProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
@@ -91,11 +92,25 @@ public class ProductService {
 
     @PreAuthorize("hasAuthority('UPDATE_PRODUCT')")
     public ProductResponse updateProduct(Integer id, ProductRequest productRequest) throws IOException {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
         if (id == null) {
             throw new IllegalArgumentException("Product ID must not be null");
         }
 
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        boolean isAdmin =
+                user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
+
+        Product product;
+        if (isAdmin) {
+            product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        } else {
+            product = user.getProducts().stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_OF_USER));
+        }
 
         productMapper.toUpdateProduct(product, productRequest);
 
@@ -125,7 +140,21 @@ public class ProductService {
     @PreAuthorize("hasAuthority('DELETE_PRODUCT')")
     @Transactional
     public void deleteProduct(Integer id) throws IOException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        boolean isAdmin =
+                user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
+
+        Product product;
+        if (isAdmin) {
+            product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        } else {
+            product = user.getProducts().stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_OF_USER));
+        }
 
         List<String> allImageUrls =
                 imageRepository.findAll().stream().map(Image::getImageURL).toList();
@@ -238,5 +267,49 @@ public class ProductService {
                 .totalPages(productPage.getTotalPages())
                 .totalElements(productPage.getTotalElements())
                 .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_BY_USERID')")
+    public List<ProductResponse> getAllProductsByUserId(String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Set<Product> products = user.getProducts();
+        return products.stream().map(productMapper::toProductResponse).toList();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_OF_USER')")
+    public List<ProductResponse> getAllProductsOfUser() {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Product> products = user.getProducts();
+        return products.stream().map(productMapper::toProductResponse).toList();
+    }
+
+    @PreAuthorize("hasAuthority('GET_PRODUCT_BY_ID_OF_USER')")
+    public ProductResponse getProductByIdOfUser(Integer id) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Product product = user.getProducts().stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_OF_USER));
+        return productMapper.toProductResponse(product);
+    }
+
+    @PreAuthorize("hasAuthority('GET_PRODUCT_BY_NAME_OF_USER')")
+    public List<ProductResponse> getProductByNameOfUser(String name) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        List<ProductResponse> products = user.getProducts().stream()
+                .filter(product -> product.getName().equalsIgnoreCase(name))
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        if (products.isEmpty()) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_OF_USER);
+        }
+        return products;
     }
 }

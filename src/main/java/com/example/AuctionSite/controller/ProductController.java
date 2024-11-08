@@ -120,4 +120,32 @@ public class ProductController {
                 .result(productService.getAllProductsSoldPaged(page, size))
                 .build();
     }
+
+    @GetMapping("/get_all_product_by_userid/{userId}")
+    ApiResponse<List<ProductResponse>> getAllProductsByUserId(@PathVariable("userId") String userId) {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productService.getAllProductsByUserId(userId))
+                .build();
+    }
+
+    @GetMapping("/get_all_product_of_user")
+    ApiResponse<List<ProductResponse>> getAllProductsOfUser() {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productService.getAllProductsOfUser())
+                .build();
+    }
+
+    @GetMapping("/get_product_by_id_of_user/{id}")
+    ApiResponse<ProductResponse> getProductByIdOfUser(@PathVariable("id") Integer id) {
+        return ApiResponse.<ProductResponse>builder()
+                .result(productService.getProductByIdOfUser(id))
+                .build();
+    }
+
+    @GetMapping("/get_product_by_name_of_user/{name}")
+    ApiResponse<List<ProductResponse>> getProductByNameOfUser(@PathVariable("name") String name) {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productService.getProductByNameOfUser(name))
+                .build();
+    }
 }
