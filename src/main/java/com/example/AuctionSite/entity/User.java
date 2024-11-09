@@ -27,6 +27,7 @@ public class User {
     String email;
     LocalDate dob;
     String fullName;
+    String phoneNumber;
 
     LocalDate joiningDate;
     LocalTime actionTime;

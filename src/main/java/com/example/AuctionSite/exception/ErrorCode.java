@@ -34,6 +34,7 @@ public enum ErrorCode {
     CONFIRM_PASSWORD_BLANK(113, "Confirm password must be at most 50 characters", HttpStatus.BAD_REQUEST),
     CONFIRM_PASSWORD_INVALID_SIZE(114, "Confirm password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     PASSWORDS_DO_NOT_MATCH(115, "Password must be match", HttpStatus.BAD_REQUEST),
+    PHONENUMBER_BLANK(116, "Phone number must be not blank", HttpStatus.BAD_REQUEST),
     // Time
     TIMENAME_BLANK(200, "Name must be not blank", HttpStatus.BAD_REQUEST),
     TIMENAME_INVALID_SIZE(201, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),

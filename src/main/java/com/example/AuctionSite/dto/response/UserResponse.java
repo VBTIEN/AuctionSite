@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Set;
 
 import com.example.AuctionSite.entity.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,8 +20,13 @@ public class UserResponse {
     String username;
     String password;
     String email;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dob;
+
     String fullName;
+    String phoneNumber;
+
     LocalDate joiningDate;
     LocalTime actionTime;
     Integer purchases;

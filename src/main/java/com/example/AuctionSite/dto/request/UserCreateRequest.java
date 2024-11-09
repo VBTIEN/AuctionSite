@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -33,9 +35,13 @@ public class UserCreateRequest {
     String email;
 
     @Past(message = "DOB_NOT_IN_THE_PAST")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dob;
 
     @NotBlank(message = "FULLNAME_BLANK")
     @Size(max = 50, message = "FULLNAME_INVALID_SIZE")
     String fullName;
+
+    @NotBlank(message = "PHONENUMBER_BLANK")
+    String phoneNumber;
 }
