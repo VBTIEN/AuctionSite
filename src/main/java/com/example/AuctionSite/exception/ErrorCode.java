@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
+    // spotless:off
     UNCATEGORIZED_EXCEPTION(1, "Uncategorized exception", HttpStatus.INTERNAL_SERVER_ERROR),
     KEY_INVALID(2, "Key invalid", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(3, "Token invalid", HttpStatus.BAD_REQUEST),
@@ -22,8 +23,7 @@ public enum ErrorCode {
     USER_UNAUTHENTICATED(102, "User unauthenticated", HttpStatus.UNAUTHORIZED),
     USER_FORBIDDEN(103, "You don't have permission", HttpStatus.FORBIDDEN),
     USERNAME_BLANK(104, "Username must be not blank", HttpStatus.BAD_REQUEST),
-    USERNAME_INVALID_SIZE(
-            105, "Username must be at least 5 characters and at most 20 characters", HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID_SIZE(105, "Username must be at least 5 characters and at most 20 characters", HttpStatus.BAD_REQUEST),
     PASSWORD_BLANK(106, "Password must be not blank", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID_SIZE(107, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     EMAIL_BLANK(108, "Email must be not blank", HttpStatus.BAD_REQUEST),
@@ -35,6 +35,7 @@ public enum ErrorCode {
     CONFIRM_PASSWORD_INVALID_SIZE(114, "Confirm password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     PASSWORDS_DO_NOT_MATCH(115, "Password must be match", HttpStatus.BAD_REQUEST),
     PHONENUMBER_BLANK(116, "Phone number must be not blank", HttpStatus.BAD_REQUEST),
+    ADDRESS_BLANK(117, "Address must be not blank", HttpStatus.BAD_REQUEST),
     // Time
     TIMENAME_BLANK(200, "Name must be not blank", HttpStatus.BAD_REQUEST),
     TIMENAME_INVALID_SIZE(201, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -106,7 +107,8 @@ public enum ErrorCode {
     // Follow
     FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED(1600, "Follow not found or you not permission", HttpStatus.NOT_FOUND),
     FOLLOW_NOT_FOUND_OR_NOT_FOLLOW(1601, "Follow not found or not follow", HttpStatus.NOT_FOUND),
-    ;
+    // spotless:on
+;
     int code;
     String message;
     HttpStatusCode httpStatusCode;

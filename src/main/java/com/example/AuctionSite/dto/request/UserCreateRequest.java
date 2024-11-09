@@ -44,4 +44,7 @@ public class UserCreateRequest {
 
     @NotBlank(message = "PHONENUMBER_BLANK")
     String phoneNumber;
+
+    @NotBlank(message = "ADDRESS_BLANK")
+    String address;
 }

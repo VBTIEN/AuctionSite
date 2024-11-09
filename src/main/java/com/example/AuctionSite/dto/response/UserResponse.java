@@ -26,8 +26,11 @@ public class UserResponse {
 
     String fullName;
     String phoneNumber;
+    String address;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate joiningDate;
+
     LocalTime actionTime;
     Integer purchases;
     Integer sales;

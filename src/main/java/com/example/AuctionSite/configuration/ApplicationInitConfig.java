@@ -135,6 +135,12 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("UPDATE_COST", "Update cost permission");
         createPermissionIfNotExists("DELETE_COST", "Delete cost permission");
 
+        createPermissionIfNotExists("CREATE_CONTACT", "Create contact permission");
+        createPermissionIfNotExists("GET_ALL_CONTACTS", "Get all contacts permission");
+        createPermissionIfNotExists("GET_CONTACT_BY_ID", "Get contact by id permission");
+        createPermissionIfNotExists("UPDATE_CONTACT", "Update contact permission");
+        createPermissionIfNotExists("DELETE_CONTACT", "Delete contact permission");
+
         createPermissionIfNotExists("CREATE_CATEGORY", "Create category permission");
         createPermissionIfNotExists("GET_ALL_CATEGORIES", "Get all categories permission");
         createPermissionIfNotExists("GET_CATEGORY_BY_NAME", "Get category by name permission");

@@ -28,6 +28,7 @@ public class User {
     LocalDate dob;
     String fullName;
     String phoneNumber;
+    String address;
 
     LocalDate joiningDate;
     LocalTime actionTime;
