@@ -18,6 +18,7 @@ public class AuctionResponse {
     LocalDateTime startTime;
     Integer finalCost;
     Integer numberOfBids;
+    String remainingTime;
 
     StatusResponse status;
 

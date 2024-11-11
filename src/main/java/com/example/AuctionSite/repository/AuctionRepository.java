@@ -22,4 +22,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     List<Auction> findAllByStatusAndStartTimeBefore(Status status, LocalDateTime dateTime);
 
     Page<Auction> findAllByStatus(Status status, Pageable pageable);
+
+    List<Auction> findByStatusName(String statusName);
 }

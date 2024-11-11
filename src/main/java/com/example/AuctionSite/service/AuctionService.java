@@ -371,4 +371,20 @@ public class AuctionService {
         }
         return auctions;
     }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void updateRemainingTimeForOngoingAuctions() {
+        List<Auction> ongoingAuctions = auctionRepository.findByStatusName("ONGOING");
+
+        ongoingAuctions.forEach(auction -> {
+            LocalDateTime endTime =
+                    auction.getStartTime().plus(auction.getTime().getTime());
+            Duration remaining = Duration.between(LocalDateTime.now(), endTime);
+
+            auction.setRemainingTime(remaining.isNegative() ? Duration.ZERO : remaining);
+
+            auctionRepository.save(auction);
+        });
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.AuctionSite.entity;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ public class Auction {
     LocalDateTime startTime;
     Integer finalCost;
     Integer numberOfBids;
+    Duration remainingTime;
 
     @ManyToOne
     Status status;

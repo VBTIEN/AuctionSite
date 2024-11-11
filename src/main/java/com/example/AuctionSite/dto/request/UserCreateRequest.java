@@ -35,7 +35,7 @@ public class UserCreateRequest {
     String email;
 
     @Past(message = "DOB_NOT_IN_THE_PAST")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     LocalDate dob;
 
     @NotBlank(message = "FULLNAME_BLANK")

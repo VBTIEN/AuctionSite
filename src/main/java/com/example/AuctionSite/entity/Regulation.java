@@ -1,8 +1,6 @@
 package com.example.AuctionSite.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import lombok.*;
@@ -16,11 +14,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Contact {
+public class Regulation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String address;
-    String phoneNumber;
-    String email;
+    String name;
+    String description;
 }
