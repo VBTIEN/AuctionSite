@@ -17,5 +17,6 @@ import lombok.experimental.FieldDefaults;
 public class Regulation {
     @Id
     String name;
+
     String description;
 }

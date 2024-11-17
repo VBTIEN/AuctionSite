@@ -15,8 +15,6 @@ import com.example.AuctionSite.entity.Status;
 public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     List<Auction> findAllByName(String name);
 
-    List<Auction> findByStatusAndStartTimeBefore(Status status, LocalDateTime currentTime);
-
     List<Auction> findAllByStatus(Status status);
 
     List<Auction> findAllByStatusAndStartTimeBefore(Status status, LocalDateTime dateTime);

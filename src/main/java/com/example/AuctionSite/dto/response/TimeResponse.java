@@ -1,7 +1,5 @@
 package com.example.AuctionSite.dto.response;
 
-import java.time.Duration;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,5 +10,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeResponse {
     String name;
-    Duration time;
+    String time;
 }

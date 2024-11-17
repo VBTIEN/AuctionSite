@@ -1,12 +1,17 @@
 package com.example.AuctionSite.service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,8 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.AuctionSite.dto.request.AuctionRequest;
-import com.example.AuctionSite.dto.response.AuctionPageResponse;
-import com.example.AuctionSite.dto.response.AuctionResponse;
+import com.example.AuctionSite.dto.response.*;
 import com.example.AuctionSite.entity.*;
 import com.example.AuctionSite.exception.AppException;
 import com.example.AuctionSite.exception.ErrorCode;
@@ -46,6 +50,10 @@ public class AuctionService {
     UserService userService;
     UserRepository userRepository;
     JdbcTemplate jdbcTemplate;
+    ImageRepository imageRepository;
+    ReceiptRepository receiptRepository;
+    DeliveryTypeRepository deliveryTypeRepository;
+    PaymentTypeRepository paymentTypeRepository;
 
     @PreAuthorize("hasAuthority('CREATE_AUCTION')")
     public AuctionResponse createAuction(AuctionRequest auctionRequest) {
@@ -85,6 +93,19 @@ public class AuctionService {
         auction.setCost(cost);
         auction.setStep(step);
         auction.setStatus(status);
+        auction.setDateCreated(LocalDate.now());
+
+        if (auctionRequest.getImageId() != null) {
+            Image image = product.getImages().stream()
+                    .filter(img -> img.getId().equals(auctionRequest.getImageId()))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND_IN_PRODUCT_IMAGES));
+            auction.setImage(image);
+        } else {
+            Image defaultImage = imageRepository.findById(1).orElseThrow();
+            auction.setImage(defaultImage);
+        }
+
         auctionRepository.save(auction);
 
         userService.addAuctionToUser(userId, auction.getId());
@@ -129,8 +150,6 @@ public class AuctionService {
                     .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_OF_USER));
         }
 
-        // Auction auction = auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not
-        // found"));
         auctionMapper.toUpdateAuction(auction, auctionRequest);
         Time time = timeRepository
                 .findById(auctionRequest.getTime())
@@ -157,6 +176,18 @@ public class AuctionService {
         auction.setCost(cost);
         auction.setStep(step);
         auction.setStatus(status);
+
+        if (auctionRequest.getImageId() != null) {
+            Image image = product.getImages().stream()
+                    .filter(img -> img.getId().equals(auctionRequest.getImageId()))
+                    .findFirst()
+                    .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND_IN_PRODUCT_IMAGES));
+            auction.setImage(image);
+        } else {
+            Image defaultImage = imageRepository.findById(1).orElseThrow();
+            auction.setImage(defaultImage);
+        }
+
         return auctionMapper.toAuctionResponse(auctionRepository.save(auction));
     }
 
@@ -241,15 +272,66 @@ public class AuctionService {
 
         Status endedStatus =
                 statusRepository.findById("ENDED").orElseThrow(() -> new RuntimeException("Status ENDED not found"));
+        Status waitingForPaymentStatus = statusRepository
+                .findById("WAITING_FOR_PAYMENT")
+                .orElseThrow(() -> new RuntimeException("Status WAITING_FOR_PAYMENT not found"));
 
         List<Auction> ongoingAuctions = auctionRepository.findAllByStatus(ongoingStatus);
         for (Auction auction : ongoingAuctions) {
             Duration auctionDuration = auction.getTime().getTime();
             LocalDateTime auctionEndTime = auction.getStartTime().plus(auctionDuration);
 
+            Product productOfAuction = auction.getProduct();
+            productOfAuction.setStatus(statusRepository.findById("ACTIVE").orElseThrow());
+
             if (auctionEndTime.isBefore(adjustedNow)) {
                 auction.setStatus(endedStatus);
+                auction.setEndTime(auctionEndTime);
                 log.info("Auction {} has ENDED", auction.getId());
+
+                Optional<Bid> highestBid = auction.getBids().stream().max(Comparator.comparing(Bid::getBidMount));
+
+                highestBid.ifPresent(bid -> {
+                    auction.setFinalCost(bid.getBidMount().intValue());
+                    auction.setWinningBidder(bid.getUser());
+
+                    Receipt receipt = Receipt.builder()
+                            .name("Receipt for product " + auction.getProduct().getName())
+                            .description("Receipt generated for the auction " + auction.getName())
+                            .sellingPrice(BigDecimal.valueOf(auction.getFinalCost()))
+                            .receiptTime(auctionEndTime)
+                            .buyer(auction.getWinningBidder())
+                            .seller(userRepository
+                                    .findCreatorByAuctionId(auction.getId())
+                                    .orElseThrow())
+                            .product(auction.getProduct())
+                            .deliveryType(deliveryTypeRepository
+                                    .findById("STANDARD_DELIVERY")
+                                    .orElseThrow())
+                            .paymentType(paymentTypeRepository
+                                    .findById("COD_PAYMENT")
+                                    .orElseThrow())
+                            .status(waitingForPaymentStatus)
+                            .build();
+                    receiptRepository.save(receipt);
+                    log.info("Payment created for Auction {} with ID {}", auction.getId(), receipt.getId());
+
+                    User seller = receipt.getSeller();
+                    User buyer = receipt.getBuyer();
+
+                    Product product = receipt.getProduct();
+
+                    seller.getSalesReceipt().add(receipt);
+                    buyer.getPurchaseReceipt().add(receipt);
+                    buyer.getProductSuccessfullyAuctioned().add(product);
+
+                    userRepository.save(seller);
+                    userRepository.save(buyer);
+
+                    product.setStatus(statusRepository.findById("PENDING_SOLD").orElseThrow());
+
+                    productRepository.save(product);
+                });
             }
         }
 
@@ -386,5 +468,128 @@ public class AuctionService {
 
             auctionRepository.save(auction);
         });
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_PENDING_OF_USER')")
+    public AuctionPageResponse getAllAuctionsPendingPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Auction> auctions = user.getAuctions();
+
+        Status status = statusRepository
+                .findById("PENDING")
+                .orElseThrow(() -> new RuntimeException("Status PENDING not found"));
+
+        List<Auction> filteredAuctions = auctions.stream()
+                .filter(auction -> status.equals(auction.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredAuctions.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredAuctions.size());
+        Page<Auction> auctionPage =
+                new PageImpl<>(filteredAuctions.subList(start, end), pageable, filteredAuctions.size());
+
+        List<AuctionResponse> auctionResponses = auctionPage.getContent().stream()
+                .map(auctionMapper::toAuctionResponse)
+                .toList();
+
+        return AuctionPageResponse.builder()
+                .auctions(auctionResponses)
+                .totalPages(auctionPage.getTotalPages())
+                .totalElements(auctionPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_ONGOING_OF_USER')")
+    public AuctionPageResponse getAllAuctionsOngoingPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Auction> auctions = user.getAuctions();
+
+        Status status = statusRepository
+                .findById("ONGOING")
+                .orElseThrow(() -> new RuntimeException("Status ONGOING not found"));
+
+        List<Auction> filteredAuctions = auctions.stream()
+                .filter(auction -> status.equals(auction.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredAuctions.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredAuctions.size());
+        Page<Auction> auctionPage =
+                new PageImpl<>(filteredAuctions.subList(start, end), pageable, filteredAuctions.size());
+
+        List<AuctionResponse> auctionResponses = auctionPage.getContent().stream()
+                .map(auctionMapper::toAuctionResponse)
+                .toList();
+
+        return AuctionPageResponse.builder()
+                .auctions(auctionResponses)
+                .totalPages(auctionPage.getTotalPages())
+                .totalElements(auctionPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_ENDED_OF_USER')")
+    public AuctionPageResponse getAllAuctionsEndedPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Auction> auctions = user.getAuctions();
+
+        Status status =
+                statusRepository.findById("ENDED").orElseThrow(() -> new RuntimeException("Status ENDED not found"));
+
+        List<Auction> filteredAuctions = auctions.stream()
+                .filter(auction -> status.equals(auction.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredAuctions.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredAuctions.size());
+        Page<Auction> auctionPage =
+                new PageImpl<>(filteredAuctions.subList(start, end), pageable, filteredAuctions.size());
+
+        List<AuctionResponse> auctionResponses = auctionPage.getContent().stream()
+                .map(auctionMapper::toAuctionResponse)
+                .toList();
+
+        return AuctionPageResponse.builder()
+                .auctions(auctionResponses)
+                .totalPages(auctionPage.getTotalPages())
+                .totalElements(auctionPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_AUCTIONS_OF_USER_JOINED')")
+    public List<AuctionResponse> getAllAuctionsOfUserJoined() {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Auction> joinedAuctions = user.getJoinedAuctions();
+
+        return joinedAuctions.stream()
+                .map(auction -> AuctionResponse.builder()
+                        .id(auction.getId())
+                        .name(auction.getName())
+                        .product(ProductResponse.builder()
+                                .id(auction.getProduct().getId())
+                                .name(auction.getProduct().getName())
+                                .build())
+                        .startTime(auction.getStartTime())
+                        .endTime(auction.getEndTime())
+                        .status(StatusResponse.builder()
+                                .name(auction.getStatus().getName())
+                                .description(auction.getStatus().getDescription())
+                                .build())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

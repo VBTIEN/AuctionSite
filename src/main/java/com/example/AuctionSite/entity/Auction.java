@@ -1,6 +1,7 @@
 package com.example.AuctionSite.entity;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -25,9 +26,12 @@ public class Auction {
     String name;
     String description;
     LocalDateTime startTime;
+    LocalDateTime endTime;
     Integer finalCost;
     Integer numberOfBids;
+    Integer participantCount;
     Duration remainingTime;
+    LocalDate dateCreated;
 
     @ManyToOne
     Status status;
@@ -55,4 +59,18 @@ public class Auction {
     @OneToMany(mappedBy = "auction")
     @ToString.Exclude
     Set<Follow> follows;
+
+    @ManyToOne
+    Image image;
+
+    @ManyToOne
+    User winningBidder;
+
+    @ManyToMany
+    @JoinTable(
+            name = "auction_participants",
+            joinColumns = @JoinColumn(name = "auction_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ToString.Exclude
+    Set<User> participants;
 }

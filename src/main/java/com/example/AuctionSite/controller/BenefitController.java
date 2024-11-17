@@ -52,7 +52,7 @@ public class BenefitController {
     }
 
     @DeleteMapping("/delete_benefit/{benefitName}")
-    ApiResponse<String> deleteBenefit(String benefitName) {
+    ApiResponse<String> deleteBenefit(@PathVariable("benefitName") String benefitName) {
         benefitService.deleteBenefit(benefitName);
         return ApiResponse.<String>builder().result("Benefit deleted").build();
     }

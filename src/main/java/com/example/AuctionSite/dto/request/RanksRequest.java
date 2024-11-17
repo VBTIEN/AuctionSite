@@ -1,9 +1,9 @@
 package com.example.AuctionSite.dto.request;
 
-import java.time.Duration;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -28,7 +28,8 @@ public class RanksRequest {
 
     // Thời gian người dùng đã tham gia vào website, tính bằng ngày
     @NotBlank(message = "MEMBERSHIPDURATION_BLANK")
-    Duration membershipDuration;
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$", message = "MEMBER_SHIP_DURATION_INVALID_FORMAT")
+    String membershipDuration;
 
     // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
     @NotBlank(message = "ACTIVITYFREQUENCY_BLANK")

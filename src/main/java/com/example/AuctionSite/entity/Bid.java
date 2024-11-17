@@ -1,8 +1,11 @@
 package com.example.AuctionSite.entity;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,12 +23,16 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    Integer bidMount;
+    BigDecimal bidMount;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
     User user;
 
     @ManyToOne
+    @JoinColumn(name = "auction_id", referencedColumnName = "id")
+    @JsonIgnore
     Auction auction;
 
     @ManyToMany

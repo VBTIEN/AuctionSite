@@ -30,8 +30,10 @@ public class RanksService {
     @PreAuthorize("hasAuthority('CREATE_RANK')")
     public RanksResponse createRank(RanksRequest ranksRequest) {
         Ranks ranks = ranksMapper.toRanks(ranksRequest);
+
         var benefits = benefitRepository.findAllById(ranksRequest.getBenefits());
         ranks.setBenefits(new HashSet<>(benefits));
+
         return ranksMapper.toRanksResponse(ranksRepository.save(ranks));
     }
 

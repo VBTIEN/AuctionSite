@@ -2,11 +2,14 @@ package com.example.AuctionSite.service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.AuctionSite.dto.request.UserCreateRequest;
 import com.example.AuctionSite.dto.request.UserUpdateRequest;
@@ -35,6 +38,7 @@ public class UserService {
     ProductRepository productRepository;
     RateRepository rateRepository;
     RanksRepository ranksRepository;
+    StatusRepository statusRepository;
 
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
         if (userRepository.existsByUsername(userCreateRequest.getUsername())) {
@@ -55,10 +59,13 @@ public class UserService {
 
         Ranks ranks = ranksRepository.findById("BRONZE").orElseThrow();
 
+        Status status = statusRepository.findById("REGISTERED").orElseThrow();
+
         user.setRoles(role);
         user.setRate(rate);
         user.setRanks(ranks);
         user.setJoiningDate(LocalDate.now());
+        user.setStatus(status);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -94,6 +101,12 @@ public class UserService {
 
     @PreAuthorize("hasAuthority('DELETE_USER')")
     public void deleteUser(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getUsername().equals("admin")) {
+            throw new AppException(ErrorCode.ADMIN_NOT_DELETE);
+        }
+
         userRepository.deleteById(id);
     }
 
@@ -125,5 +138,55 @@ public class UserService {
 
         user.getAuctions().add(auction);
         userRepository.save(user);
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_USERS_JOINED_BY_AUCTIONID_OF_USER')")
+    public Set<UserResponse> getAuctionParticipantsOfUserCreate(Integer auctionId) {
+        Auction auction =
+                auctionRepository.findById(auctionId).orElseThrow(() -> new RuntimeException("Auction not found"));
+
+        User creator = userRepository
+                .findCreatorByAuctionId(auctionId)
+                .orElseThrow(() -> new AppException(ErrorCode.CREATOR_NOT_FOUND));
+
+        String currentUserId = getUserId();
+
+        if (!creator.getId().equals(currentUserId)) {
+            throw new AppException(ErrorCode.USER_IS_NOT_CERATOR);
+        }
+
+        return auction.getParticipants().stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .build())
+                .collect(Collectors.toSet());
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_USERS_JOINED_BY_AUCTIONID')")
+    public Set<UserResponse> getAuctionParticipants(Integer auctionId) {
+        Auction auction =
+                auctionRepository.findById(auctionId).orElseThrow(() -> new RuntimeException("Auction not found"));
+
+        return auction.getParticipants().stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .build())
+                .collect(Collectors.toSet());
+    }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void updateOnlineUserActionTime() {
+        Status onlineStatus = statusRepository.findById("ONLINE").orElseThrow();
+
+        var onlineUsers = userRepository.findByStatus(onlineStatus);
+
+        for (User user : onlineUsers) {
+            user.setActionTime(user.getActionTime().plusMinutes(1));
+            userRepository.save(user);
+            log.info("Updated actionTime for user: " + user.getUsername());
+        }
     }
 }

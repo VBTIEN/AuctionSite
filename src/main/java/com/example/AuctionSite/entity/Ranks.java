@@ -31,8 +31,4 @@ public class Ranks {
     @ManyToMany
     @ToString.Exclude
     Set<Benefit> benefits;
-
-    @OneToMany
-    @ToString.Exclude
-    Set<User> users;
 }

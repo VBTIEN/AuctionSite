@@ -19,10 +19,12 @@ import com.example.AuctionSite.dto.request.RefreshRequest;
 import com.example.AuctionSite.dto.response.AuthenticationResponse;
 import com.example.AuctionSite.dto.response.IntrospectResponse;
 import com.example.AuctionSite.entity.InvalidatedToken;
+import com.example.AuctionSite.entity.Status;
 import com.example.AuctionSite.entity.User;
 import com.example.AuctionSite.exception.AppException;
 import com.example.AuctionSite.exception.ErrorCode;
 import com.example.AuctionSite.repository.InvalidatedTokenRepository;
+import com.example.AuctionSite.repository.StatusRepository;
 import com.example.AuctionSite.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -44,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationService {
     UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
+    StatusRepository statusRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -68,7 +71,7 @@ public class AuthenticationService {
         return IntrospectResponse.builder().valid(isValid).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         var user = userRepository
                 .findByUsername(authenticationRequest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -77,6 +80,11 @@ public class AuthenticationService {
         if (!authenticated) {
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
         }
+
+        Status status = statusRepository.findById("ONLINE").orElseThrow();
+        user.setStatus(status);
+        userRepository.save(user);
+
         var token = generateToken(user);
         return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
@@ -85,12 +93,19 @@ public class AuthenticationService {
         try {
             var signToken = verifyToken(logoutRequest.getToken(), true);
 
+            String username = signToken.getJWTClaimsSet().getSubject();
+            var user = userRepository.findByUsername(username).orElseThrow();
+
             String jit = signToken.getJWTClaimsSet().getJWTID();
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
             InvalidatedToken invalidatedToken =
                     InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
             invalidatedTokenRepository.save(invalidatedToken);
+
+            Status status = statusRepository.findById("OFFLINE").orElseThrow();
+            user.setStatus(status);
+            userRepository.save(user);
         } catch (AppException e) {
             log.info("Token already expired");
         }

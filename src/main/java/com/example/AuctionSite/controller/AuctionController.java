@@ -153,4 +153,35 @@ public class AuctionController {
                 .result(auctionService.getAuctionByNameOfUser(name))
                 .build();
     }
+
+    @GetMapping("/auctions_pending_paged_of_user")
+    ApiResponse<AuctionPageResponse> getAllAuctionsPendingPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<AuctionPageResponse>builder()
+                .result(auctionService.getAllAuctionsPendingPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/auctions_ongoing_paged_of_user")
+    ApiResponse<AuctionPageResponse> getAllAuctionsOngoingPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<AuctionPageResponse>builder()
+                .result(auctionService.getAllAuctionsOngoingPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/auctions_ended_paged_of_user")
+    ApiResponse<AuctionPageResponse> getAllAuctionsEndedPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<AuctionPageResponse>builder()
+                .result(auctionService.getAllAuctionsEndedPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/get_all_auctions_of_user_joined")
+    ApiResponse<List<AuctionResponse>> getAllAuctionsOfUserJoined() {
+        return ApiResponse.<List<AuctionResponse>>builder()
+                .result(auctionService.getAllAuctionsOfUserJoined())
+                .build();
+    }
 }

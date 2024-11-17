@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -311,5 +312,171 @@ public class ProductService {
             throw new AppException(ErrorCode.PRODUCT_NOT_OF_USER);
         }
         return products;
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_PENDING_AUCTION_PAGED_OF_USER')")
+    public ProductPageResponse getAllProductsPendingAuctionPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Product> products = user.getProducts();
+
+        Status status = statusRepository
+                .findById("PENDING_AUCTION")
+                .orElseThrow(() -> new RuntimeException("Status PENDING_AUCTION not found"));
+
+        List<Product> filteredProducts = products.stream()
+                .filter(product -> status.equals(product.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredProducts.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredProducts.size());
+        Page<Product> productPage =
+                new PageImpl<>(filteredProducts.subList(start, end), pageable, filteredProducts.size());
+
+        List<ProductResponse> productResponses = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        return ProductPageResponse.builder()
+                .products(productResponses)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_ACTIVE_PAGED_OF_USER')")
+    public ProductPageResponse getAllProductsActivePagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Product> products = user.getProducts();
+
+        Status status =
+                statusRepository.findById("ACTIVE").orElseThrow(() -> new RuntimeException("Status ACTIVE not found"));
+
+        List<Product> filteredProducts = products.stream()
+                .filter(product -> status.equals(product.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredProducts.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredProducts.size());
+        Page<Product> productPage =
+                new PageImpl<>(filteredProducts.subList(start, end), pageable, filteredProducts.size());
+
+        List<ProductResponse> productResponses = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        return ProductPageResponse.builder()
+                .products(productResponses)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_ADDED_PAGED_OF_USER')")
+    public ProductPageResponse getAllProductsAddedPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Product> products = user.getProducts();
+
+        Status status =
+                statusRepository.findById("ADDED").orElseThrow(() -> new RuntimeException("Status ADDED not found"));
+
+        List<Product> filteredProducts = products.stream()
+                .filter(product -> status.equals(product.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredProducts.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredProducts.size());
+        Page<Product> productPage =
+                new PageImpl<>(filteredProducts.subList(start, end), pageable, filteredProducts.size());
+
+        List<ProductResponse> productResponses = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        return ProductPageResponse.builder()
+                .products(productResponses)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_SOLD_PAGED_OF_USER')")
+    public ProductPageResponse getAllProductsSoldPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Product> products = user.getProducts();
+
+        Status status =
+                statusRepository.findById("SOLD").orElseThrow(() -> new RuntimeException("Status SOLD not found"));
+
+        List<Product> filteredProducts = products.stream()
+                .filter(product -> status.equals(product.getStatus()))
+                .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = Math.min((int) pageable.getOffset(), filteredProducts.size());
+        int end = Math.min((start + pageable.getPageSize()), filteredProducts.size());
+        Page<Product> productPage =
+                new PageImpl<>(filteredProducts.subList(start, end), pageable, filteredProducts.size());
+
+        List<ProductResponse> productResponses = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        return ProductPageResponse.builder()
+                .products(productResponses)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_PRODUCTS_SA_PAGED_OF_USER')")
+    public ProductPageResponse getAllProductsSAPagedOfUser(int page, int size) {
+        String userId = userService.getUserId();
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lấy danh sách sản phẩm đã đấu giá thành công
+        Set<Product> productsSA = user.getProductSuccessfullyAuctioned();
+
+        // Chuyển danh sách sang Page
+        Pageable pageable = PageRequest.of(page, size);
+        List<Product> productList = new ArrayList<>(productsSA);
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), productList.size());
+
+        if (start > productList.size()) {
+            return ProductPageResponse.builder()
+                    .products(Collections.emptyList())
+                    .totalPages(0)
+                    .totalElements(0L)
+                    .build();
+        }
+
+        Page<Product> productPage = new PageImpl<>(productList.subList(start, end), pageable, productList.size());
+
+        // Map sang ProductResponse
+        List<ProductResponse> products = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
+        // Tạo ProductPageResponse
+        return ProductPageResponse.builder()
+                .products(products)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
     }
 }

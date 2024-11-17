@@ -1,7 +1,7 @@
 package com.example.AuctionSite.entity;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -29,9 +29,11 @@ public class User {
     String fullName;
     String phoneNumber;
     String address;
-
     LocalDate joiningDate;
-    LocalTime actionTime;
+
+    @Builder.Default
+    Duration actionTime = Duration.ZERO;
+
     Integer purchases;
     Integer sales;
     Integer sumOfRate;
@@ -66,4 +68,23 @@ public class User {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     Set<Follow> follows;
+
+    @ManyToOne
+    Status status;
+
+    @ManyToMany(mappedBy = "participants")
+    @ToString.Exclude
+    Set<Auction> joinedAuctions;
+
+    @OneToMany
+    @ToString.Exclude
+    Set<Receipt> salesReceipt;
+
+    @OneToMany
+    @ToString.Exclude
+    Set<Receipt> purchaseReceipt;
+
+    @OneToMany
+    @ToString.Include
+    Set<Product> productSuccessfullyAuctioned;
 }

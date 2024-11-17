@@ -1,5 +1,6 @@
 package com.example.AuctionSite.mapper;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,10 @@ import com.example.AuctionSite.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "salesReceipt", ignore = true)
+    @Mapping(target = "purchaseReceipt", ignore = true)
+    @Mapping(target = "joinedAuctions", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "follows", ignore = true)
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)
@@ -36,6 +41,7 @@ public interface UserMapper {
     User toUser(UserCreateRequest userCreateRequest);
 
     @Mapping(target = "follows", expression = "java(mapFollowsToFollowResponses(user.getFollows()))")
+    @Mapping(target = "actionTime", source = "actionTime", qualifiedByName = "durationToString")
     UserResponse toUserResponse(User user);
 
     default Set<FollowResponse> mapFollowsToFollowResponses(Set<Follow> follows) {
@@ -49,8 +55,13 @@ public interface UserMapper {
                 .collect(Collectors.toSet());
     }
 
+    @Mapping(target = "actionTime", source = "actionTime", qualifiedByName = "durationToString")
     List<UserResponse> toListUserResponse(List<User> users);
 
+    @Mapping(target = "salesReceipt", ignore = true)
+    @Mapping(target = "purchaseReceipt", ignore = true)
+    @Mapping(target = "joinedAuctions", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "follows", ignore = true)
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "ranks", ignore = true)
@@ -67,4 +78,14 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "actionTime", ignore = true)
     void toUpdateUser(@MappingTarget User user, UserUpdateRequest userUpdateRequest);
+
+    @org.mapstruct.Named("durationToString")
+    default String durationToString(Duration duration) {
+        if (duration == null) {
+            return "00:00";
+        }
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        return String.format("%02d:%02d", hours, minutes);
+    }
 }

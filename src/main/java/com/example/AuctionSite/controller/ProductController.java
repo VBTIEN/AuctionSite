@@ -148,4 +148,44 @@ public class ProductController {
                 .result(productService.getProductByNameOfUser(name))
                 .build();
     }
+
+    @GetMapping("/products_pending_auction_paged_of_user")
+    ApiResponse<ProductPageResponse> getProductsPendingAuctionPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getAllProductsPendingAuctionPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/products_active_paged_of_user")
+    ApiResponse<ProductPageResponse> getProductsActivePagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getAllProductsActivePagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/products_added_paged_of_user")
+    ApiResponse<ProductPageResponse> getProductsAddedPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getAllProductsAddedPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/products_sold_paged_of_user")
+    ApiResponse<ProductPageResponse> getProductsSoldPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getAllProductsSoldPagedOfUser(page, size))
+                .build();
+    }
+
+    @GetMapping("/products_sa_paged_of_user")
+    ApiResponse<ProductPageResponse> getProductsSAPagedOfUser(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getAllProductsSAPagedOfUser(page, size))
+                .build();
+    }
 }

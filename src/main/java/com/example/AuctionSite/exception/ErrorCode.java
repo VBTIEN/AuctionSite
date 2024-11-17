@@ -17,6 +17,7 @@ public enum ErrorCode {
     KEY_INVALID(2, "Key invalid", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(3, "Token invalid", HttpStatus.BAD_REQUEST),
     TOKEN_BLANK(4, "Token must be not blank", HttpStatus.BAD_REQUEST),
+    ADMIN_NOT_DELETE(5, "Admin must be not delete", HttpStatus.BAD_REQUEST),
     // User
     USER_EXISTED(100, "User existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(101, "User not existed", HttpStatus.NOT_FOUND),
@@ -36,10 +37,15 @@ public enum ErrorCode {
     PASSWORDS_DO_NOT_MATCH(115, "Password must be match", HttpStatus.BAD_REQUEST),
     PHONENUMBER_BLANK(116, "Phone number must be not blank", HttpStatus.BAD_REQUEST),
     ADDRESS_BLANK(117, "Address must be not blank", HttpStatus.BAD_REQUEST),
+    CREATOR_NOT_FOUND(118, "Creator not found", HttpStatus.BAD_REQUEST),
+    CREATOR_CANNOT_BID(119, "Creator cannot bid", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(120, "User not found", HttpStatus.BAD_REQUEST),
+    USER_IS_NOT_CERATOR(121, "You do not have permission to view the participant list for this auction.", HttpStatus.BAD_REQUEST),
     // Time
     TIMENAME_BLANK(200, "Name must be not blank", HttpStatus.BAD_REQUEST),
     TIMENAME_INVALID_SIZE(201, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
     TIME_BLANK(202, "Time must be not blank", HttpStatus.BAD_REQUEST),
+    TIME_INVALID_FORMAT(203, "Time must be format", HttpStatus.BAD_REQUEST),
     // Step
     STEPNAME_BLANK(300, "Name must be not blank", HttpStatus.BAD_REQUEST),
     STEPNAME_INVALID_SIZE(301, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -64,6 +70,7 @@ public enum ErrorCode {
     MEMBERSHIPDURATION_BLANK(704, "Membership duration must be not blank", HttpStatus.BAD_REQUEST),
     ACTIVITYFREQUENCY_BLANK(705, "Activity frequency must be not blank", HttpStatus.BAD_REQUEST),
     RANKS_BENEFITS_BLANK(706, "Benefits must be not blank", HttpStatus.BAD_REQUEST),
+    MEMBER_SHIP_DURATION_INVALID_FORMAT(707, "Member ship duration must be format", HttpStatus.BAD_REQUEST),
     // Product
     PRODUCTNAME_BLANK(800, "Name must be not blank", HttpStatus.BAD_REQUEST),
     PRODUCTNAME_INVALID_SIZE(801, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -81,6 +88,7 @@ public enum ErrorCode {
     NOTIFICATION_DESCRIPTION_BLANK(1002, "Description must be at most 50 characters", HttpStatus.BAD_REQUEST),
     // Image
     FILE_BLANK(1100, "File must be not blank", HttpStatus.BAD_REQUEST),
+    IMAGE_NOT_FOUND_IN_PRODUCT_IMAGES(1101, "Selected image not found in product images", HttpStatus.BAD_REQUEST),
     // Cost
     COSTNAME_BLANK(1200, "Name must be not blank", HttpStatus.BAD_REQUEST),
     COSTNAME_INVALID_SIZE(1201, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -104,9 +112,24 @@ public enum ErrorCode {
     AUCTION_STEP_BLANK(1507, "Step must be not blank", HttpStatus.BAD_REQUEST),
     AUCTION_NOT_FOUND(1508, "Auction not found", HttpStatus.NOT_FOUND),
     AUCTION_NOT_OF_USER(1509, "Auction not yours", HttpStatus.BAD_REQUEST),
+    AUCTION_NOT_ONGOING(1510, "Auction is not currently ongoing", HttpStatus.BAD_REQUEST),
+    CONSECUTIVE_BID_NOT_ALLOWED(1511, "User is not allowed to consecutively bid", HttpStatus.BAD_REQUEST),
     // Follow
     FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED(1600, "Follow not found or you not permission", HttpStatus.NOT_FOUND),
     FOLLOW_NOT_FOUND_OR_NOT_FOLLOW(1601, "Follow not found or not follow", HttpStatus.NOT_FOUND),
+    //Bid
+    BIDMOUNT_BLANK(1700, "Bid mount must be not blank", HttpStatus.BAD_REQUEST),
+    BIDMOUNT_INVALID(1701, "Bid amount must be at least", HttpStatus.BAD_REQUEST),
+    BID_NOT_FOUND_OR_NOT_AUTHORIZED(1702, "Bid not found or you not permission", HttpStatus.BAD_REQUEST),
+    //DeliveryType
+    DELIVERYTYPE_NAME_BLANK(1800, "Delivery type name must be not blank", HttpStatus.BAD_REQUEST),
+    DELIVERYTYPE_DESCRIPTION_BLANK(1801, "Delivery type description must be not blank", HttpStatus.BAD_REQUEST),
+    //PaymentType
+    PAYMENTTYPE_NAME_BLANK(1900, "Payment type name must be not blank", HttpStatus.BAD_REQUEST),
+    PAYMENTTYPE_DESCRIPTION_BLANK(1901, "Payment type description must be not blank", HttpStatus.BAD_REQUEST),
+    //Regulation
+    REGULATION_NAME_BLANK(2000, "Regulation name must be not blank", HttpStatus.BAD_REQUEST),
+    REGULATION_DESCRIPTION_BLANK(2001, "Regulation description must be not blank", HttpStatus.BAD_REQUEST),
     // spotless:on
 ;
     int code;

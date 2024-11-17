@@ -19,6 +19,12 @@ import com.example.AuctionSite.entity.Follow;
 
 @Mapper(componentModel = "spring")
 public interface AuctionMapper {
+    @Mapping(target = "participants", ignore = true)
+    @Mapping(target = "participantCount", ignore = true)
+    @Mapping(target = "winningBidder", ignore = true)
+    @Mapping(target = "endTime", ignore = true)
+    @Mapping(target = "dateCreated", ignore = true)
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "remainingTime", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "numberOfBids", ignore = true)
@@ -47,6 +53,12 @@ public interface AuctionMapper {
                 .collect(Collectors.toSet());
     }
 
+    @Mapping(target = "participants", ignore = true)
+    @Mapping(target = "participantCount", ignore = true)
+    @Mapping(target = "winningBidder", ignore = true)
+    @Mapping(target = "endTime", ignore = true)
+    @Mapping(target = "dateCreated", ignore = true)
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "remainingTime", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "numberOfBids", ignore = true)

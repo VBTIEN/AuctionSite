@@ -35,6 +35,9 @@ public class ApplicationInitConfig {
     NotificationRepository notificationRepository;
     StatusRepository statusRepository;
     RanksRepository ranksRepository;
+    ImageRepository imageRepository;
+    DeliveryTypeRepository deliveryTypeRepository;
+    PaymentTypeRepository paymentTypeRepository;
 
     @Bean
     ApplicationRunner applicationRunner() {
@@ -49,17 +52,23 @@ public class ApplicationInitConfig {
             initializeNotifications();
             initializeStatus();
             initializeRanks();
+            initializeImages();
+            initializeDeliveryTypes();
+            initializePaymentTypes();
             createDefaultAdminUser();
         };
     }
 
     private void initializePermissions() {
+        // spotless:off
         createPermissionIfNotExists("GET_ALL_USERS", "Get all users permission");
         createPermissionIfNotExists("GET_USER_BY_ID", "Get user by id permission");
         createPermissionIfNotExists("GET_USER_BY_USERNAME", "Get user by username permission");
         createPermissionIfNotExists("UPDATE_USER", "Update user permission"); // USER
         createPermissionIfNotExists("DELETE_USER", "Delete user permission"); // USER
-
+        createPermissionIfNotExists("GET_ALL_USERS_JOINED_BY_AUCTIONID_OF_USER", "Get all users joined by auctionid of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_USERS_JOINED_BY_AUCTIONID", "Get all users joined by auctionid of user permission");
+        
         createPermissionIfNotExists("CREATE_TIME", "Create time permission");
         createPermissionIfNotExists("GET_ALL_TIMES", "Get all times permission");
         createPermissionIfNotExists("GET_TIME_BY_NAME", "Get time by name permission");
@@ -99,6 +108,11 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_ALL_PRODUCTS", "Get all products permission");
         createPermissionIfNotExists("GET_ALL_PRODUCTS_BY_USERID", "Get all products permission");
         createPermissionIfNotExists("GET_ALL_PRODUCTS_OF_USER", "Get all products of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_PENDING_AUCTION_PAGED_OF_USER", "Get all products pending auction of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_ACTIVE_PAGED_OF_USER", "Get all products active of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_ADDED_PAGED_OF_USER", "Get all products added of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_SOLD_PAGED_OF_USER", "Get all products sold of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_PRODUCTS_SA_PAGED_OF_USER", "Get all products sold of user permission"); // USER
         createPermissionIfNotExists("GET_PRODUCT_BY_ID", "Get product by id permission");
         createPermissionIfNotExists("GET_PRODUCT_BY_ID_OF_USER", "Get product by id of user permission"); // USER
         createPermissionIfNotExists("GET_PRODUCT_BY_NAME", "Get product by name permission");
@@ -146,6 +160,12 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_CATEGORY_BY_NAME", "Get category by name permission");
         createPermissionIfNotExists("UPDATE_CATEGORY", "Update category permission");
         createPermissionIfNotExists("DELETE_CATEGORY", "Delete category permission");
+        
+        createPermissionIfNotExists("CREATE_BID", "Create bid permission"); //USER
+        createPermissionIfNotExists("GET_ALL_BIDS_BY_USERID", "Get all bids by userid permission");
+        createPermissionIfNotExists("GET_ALL_BIDS_BY_AUCTIONID", "Get all bids by auctionid permission");
+        createPermissionIfNotExists("GET_ALL_BIDS_OF_USER", "Get all bids of user permission"); //USER
+        createPermissionIfNotExists("GET_ALL_BIDS_BY_AUCTIONID_OF_USER", "Get all bids by auctionid of user permission"); //USER
 
         createPermissionIfNotExists("CREATE_BENEFIT", "Create benefit permission");
         createPermissionIfNotExists("GET_ALL_BENEFITS", "Get all benefits permission");
@@ -157,12 +177,45 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_ALL_AUCTIONS", "Get all auctions permission");
         createPermissionIfNotExists("GET_ALL_AUCTIONS_BY_USERID", "Get all products permission");
         createPermissionIfNotExists("GET_ALL_AUCTIONS_OF_USER", "Get all auctions of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_OF_USER_JOINED", "Get all auctions of user joined permission"); // USER
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_PENDING_OF_USER", "Get all auctions pending of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_ONGOING_OF_USER", "Get all auctions ongoing of user permission"); // USER
+        createPermissionIfNotExists("GET_ALL_AUCTIONS_ENDED_OF_USER", "Get all auctions ended of user permission"); // USER
         createPermissionIfNotExists("GET_AUCTION_BY_ID", "Get auction by id permission");
         createPermissionIfNotExists("GET_AUCTION_BY_ID_OF_USER", "Get auction by id of user permission"); // USER
         createPermissionIfNotExists("GET_AUCTION_BY_NAME", "Get auction by name permission");
         createPermissionIfNotExists("GET_AUCTION_BY_NAME_OF_USER", "Get auction by name of user permission"); // USER
         createPermissionIfNotExists("UPDATE_AUCTION", "Update auction permission"); // USER
         createPermissionIfNotExists("DELETE_AUCTION", "Delete auction permission"); // USER
+        
+        createPermissionIfNotExists("CREATE_DELIVERYTYPE", "Create delivery type permission");
+        createPermissionIfNotExists("GET_ALL_DELIVERYTYPES", "Get all delivery types permission");
+        createPermissionIfNotExists("GET_DELIVERYTYPE_BY_NAME", "Get delivery type by name permission");
+        createPermissionIfNotExists("UPDATE_DELIVERYTYPE", "Update delivery type permission");
+        createPermissionIfNotExists("DELETE_DELIVERYTYPE", "Deleted delivery type permission");
+        
+        createPermissionIfNotExists("CREATE_PAYMENTTYPE", "Create payment type permission");
+        createPermissionIfNotExists("GET_ALL_PAYMENTTYPES", "Get all payment types permission");
+        createPermissionIfNotExists("GET_PAYMENTTYPE_BY_NAME", "Get payment type by name permission");
+        createPermissionIfNotExists("UPDATE_PAYMENTTYPE", "Update payment type permission");
+        createPermissionIfNotExists("DELETE_PAYMENTTYPE", "Delete payment type permission");
+        
+        createPermissionIfNotExists("CREATE_REGULATION", "Create regulation permission");
+        createPermissionIfNotExists("GET_ALL_REGULATIONS", "Get all regulations permission");
+        createPermissionIfNotExists("GET_REGULATION_BY_NAME", "Get regulation by name permission");
+        createPermissionIfNotExists("UPDATE_REGULATION", "Update regulation permission");
+        createPermissionIfNotExists("DELETE_REGULATION", "Delete regulation permission");
+        
+        createPermissionIfNotExists("GET_ALL_RECEIPTS", "Get all receipts permission");
+        createPermissionIfNotExists("GET_RECEIPT_BY_ID", "Get receipt by id permission");
+        createPermissionIfNotExists("GET_RECEIPT_BY_PRODUCTID", "Get receipt by product id permission");
+        createPermissionIfNotExists("GET_RECEIPTS_BY_SELLERID", "Get receipts by seller id permission");
+        createPermissionIfNotExists("GET_RECEIPTS_BY_BUYERID", "Get receipts by buyer id permission");
+        createPermissionIfNotExists("GET_RECEIPTS_OF_SELLER", "Get receipts of seller permission"); //USER
+        createPermissionIfNotExists("GET_RECEIPTS_OF_BUYER", "Get receipts of buyer permission"); //USER
+        createPermissionIfNotExists("UPDATE_RECEIPT", "Update receipt permission"); //USER
+        createPermissionIfNotExists("DELETE_RECEIPT", "Delete receipt permission"); //USER
+        // spotless:on
     }
 
     private void initializeRoles() {
@@ -171,6 +224,9 @@ public class ApplicationInitConfig {
     }
 
     private void initializeTimes() {
+        createTimeIfNotExists("5m", Duration.ofMinutes(5));
+        createTimeIfNotExists("2m", Duration.ofMinutes(2));
+
         createTimeIfNotExists("1h", Duration.ofHours(1));
         createTimeIfNotExists("2h", Duration.ofHours(2));
         createTimeIfNotExists("3h", Duration.ofHours(3));
@@ -302,16 +358,17 @@ public class ApplicationInitConfig {
         createNotificationIfNotExists("NOTICE_OF_VIOLATION", "Bạn đã vi phạm quy định đấu giá. Vui lòng tuân thủ quy định để tránh bị khóa tài khoản.");
         //Payment
         createNotificationIfNotExists("PAYMENT_NOTICE", "Vui lòng hoàn tất thanh toán để nhận hàng.");
-        //Bag
-        
         //spotless:on
     }
 
     private void initializeStatus() {
         // User
         createStatusIfNotExists("ONLINE", "Đang hoạt động");
+        createStatusIfNotExists("OFFLINE", "Đang không hoạt động");
+        createStatusIfNotExists("REGISTERED", "Đang đăng ký");
         createStatusIfNotExists("LOGGED_IN", "Đã đăng nhập");
         createStatusIfNotExists("LOGGED_OUT", "Đã đăng xuất");
+        createStatusIfNotExists("PARTICIPATE_IN_AUCTION", "Đang tham gia đấu giá");
         // Product
         createStatusIfNotExists("PENDING_APPROVAL", "Chờ duyệt");
         createStatusIfNotExists("PENDING_AUCTION", "Chờ đấu giá");
@@ -329,6 +386,10 @@ public class ApplicationInitConfig {
         createStatusIfNotExists("ENDED", "Đã kết thúc");
         createStatusIfNotExists("COMPLETED", "Đã hoàn tất");
         createStatusIfNotExists("CANCELLED", "Hủy đấu giá");
+        // Payment
+        createStatusIfNotExists("WAITING_FOR_PAYMENT", "Chờ thanh toán");
+        createStatusIfNotExists("PAID", "Đã thanh toán");
+        createStatusIfNotExists("PAYMENT_CANCELLED", "Đã hủy thanh toán");
     }
 
     private void initializeRanks() {
@@ -337,6 +398,31 @@ public class ApplicationInitConfig {
         createRankIfNotExists("GOLD", "Hạng Vàng", 2, Duration.ofMinutes(2), 3);
         createRankIfNotExists("PLATINUM", "Hạng Bạch Kim", 3, Duration.ofMinutes(3), 4);
         createRankIfNotExists("DIAMOND", "Hạng Kim Cương", 4, Duration.ofMinutes(4), 5);
+    }
+
+    private void initializeImages() {
+        createImagesIfNotExists(1, "/image_default/auction_image.jpg");
+    }
+
+    private void initializeDeliveryTypes() {
+        // spotless:off
+        createDeliveryTypesIfNotExists("STANDARD_DELIVERY", "Phương thức cơ bản, chi phí thấp, thời gian từ vài ngày đến một tuần.");
+        createDeliveryTypesIfNotExists("FAST_DELIVERY", "Thời gian ngắn (1-3 ngày), chi phí cao hơn giao hàng tiêu chuẩn.");
+        createDeliveryTypesIfNotExists("SAME_DAY_DELIVERY", "Nhận hàng ngay trong ngày đặt, chi phí cao nhất.");
+        createDeliveryTypesIfNotExists("THIRD_PARTY_DELIVERY", "Người mua chọn đơn vị vận chuyển bên thứ 3, linh hoạt về dịch vụ và chi phí.");
+        createDeliveryTypesIfNotExists("PICK_UP_AT_STORE/WAREHOUSE", "Người mua đến nhận hàng trực tiếp, tiết kiệm chi phí.");
+        createDeliveryTypesIfNotExists("INTERNATIONAL_DELIVERY", "Gửi hàng đến quốc gia khác, thời gian và chi phí tùy thuộc vào địa điểm.");
+        //spotless:on
+    }
+
+    private void initializePaymentTypes() {
+        // spotless:off
+        createPaymentTypesIfNotExists("PAYMENT_BY_CREDIT/DEBIT_CARD", "Hỗ trợ Visa, Mastercard, giao dịch nhanh chóng, an toàn.");
+        createPaymentTypesIfNotExists("PAYMENT_VIA_E-WALLET", "Ví như PayPal, ZaloPay, Momo, thuận tiện, không cần nhập thông tin thẻ.");
+        createPaymentTypesIfNotExists("BANK_TRANSFER", "Chuyển khoản trực tiếp, an toàn cho giao dịch lớn.");
+        createPaymentTypesIfNotExists("INSTALLMENT_PAYMENT", "Quét mã QR qua ứng dụng ngân hàng hoặc ví điện tử.");
+        createPaymentTypesIfNotExists("COD_PAYMENT", "Thu tiền khi nhận hàng, phù hợp khi cần kiểm tra hàng trước.");
+        //spotless:on
     }
 
     private void createDefaultAdminUser() {
@@ -375,11 +461,18 @@ public class ApplicationInitConfig {
             } else if ("USER".equals(roleName)) {
                 // spotless:off
                 HashSet<Permission> permissions = new HashSet<>();
+                
                 permissions.add(permissionRepository.findById("UPDATE_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("DELETE_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_USERS_JOINED_BY_AUCTIONID_OF_USER").orElseThrow());
 
                 permissions.add(permissionRepository.findById("CREATE_PRODUCT").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_PENDING_AUCTION_PAGED_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_ACTIVE_PAGED_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_ADDED_PAGED_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_SOLD_PAGED_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_PRODUCTS_SA_PAGED_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_PRODUCT_BY_ID_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_PRODUCT_BY_NAME_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("UPDATE_PRODUCT").orElseThrow());
@@ -387,6 +480,10 @@ public class ApplicationInitConfig {
 
                 permissions.add(permissionRepository.findById("CREATE_AUCTION").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_OF_USER_JOINED").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_PENDING_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_ONGOING_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_AUCTIONS_ENDED_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_AUCTION_BY_ID_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_AUCTION_BY_NAME_OF_USER").orElseThrow());
                 permissions.add(permissionRepository.findById("UPDATE_AUCTION").orElseThrow());
@@ -395,6 +492,16 @@ public class ApplicationInitConfig {
                 permissions.add(permissionRepository.findById("ADD_FOLLOW_AUCTION").orElseThrow());
                 permissions.add(permissionRepository.findById("UNFOLLOW_AUCTION").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_ALL_FOLLOW_OF_USER").orElseThrow());
+                
+                permissions.add(permissionRepository.findById("CREATE_BID").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_BIDS_OF_USER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_ALL_BIDS_BY_AUCTIONID_OF_USER").orElseThrow());
+                
+                permissions.add(permissionRepository.findById("GET_RECEIPTS_OF_SELLER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_RECEIPTS_OF_BUYER").orElseThrow());
+                permissions.add(permissionRepository.findById("UPDATE_RECEIPT").orElseThrow());
+                permissions.add(permissionRepository.findById("DELETE_RECEIPT").orElseThrow());
+                
                 role.setPermissions(permissions);
                 //spotless:on
             }
@@ -467,6 +574,29 @@ public class ApplicationInitConfig {
                     .activityFrequency(activityFrequency)
                     .build();
             ranksRepository.save(ranks);
+        });
+    }
+
+    private void createImagesIfNotExists(Integer id, String imageURL) {
+        imageRepository.findById(id).ifPresentOrElse(image -> {}, () -> {
+            Image image = Image.builder().id(id).imageURL(imageURL).build();
+            imageRepository.save(image);
+        });
+    }
+
+    private void createDeliveryTypesIfNotExists(String name, String description) {
+        deliveryTypeRepository.findById(name).ifPresentOrElse(deliveryType -> {}, () -> {
+            DeliveryType deliveryType =
+                    DeliveryType.builder().name(name).description(description).build();
+            deliveryTypeRepository.save(deliveryType);
+        });
+    }
+
+    private void createPaymentTypesIfNotExists(String name, String description) {
+        paymentTypeRepository.findById(name).ifPresentOrElse(paymentType -> {}, () -> {
+            PaymentType paymentType =
+                    PaymentType.builder().name(name).description(description).build();
+            paymentTypeRepository.save(paymentType);
         });
     }
 }

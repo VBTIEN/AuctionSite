@@ -17,7 +17,7 @@ public class UserUpdateRequest {
     String password;
     String email;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     LocalDate dob;
 
     String fullName;

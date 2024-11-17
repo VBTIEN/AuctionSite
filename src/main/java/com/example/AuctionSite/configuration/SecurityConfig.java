@@ -36,6 +36,7 @@ public class SecurityConfig {
     };
 
     String[] PUBLIC_ENDPOINTS_GET = {
+        // Product
         "/products/search_product_by_name",
         "/products/get_products_pending_auction",
         "/products/get_products_active",
@@ -43,6 +44,7 @@ public class SecurityConfig {
         "/products/products_pending_auction_paged",
         "/products/products_active_paged",
         "/products/products_sold_paged",
+        // Auction
         "/auctions/search_auction_by_name",
         "/auctions/get_auctions_pending",
         "/auctions/get_auctions_ongoing",

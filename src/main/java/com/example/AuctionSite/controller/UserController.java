@@ -2,6 +2,7 @@ package com.example.AuctionSite.controller;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.validation.Valid;
 
@@ -103,5 +104,19 @@ public class UserController {
 
         userService.deleteUser(id);
         return ApiResponse.<String>builder().result("User deleted").build();
+    }
+
+    @GetMapping("/get_all_users_joined_by_auctionid_of_user")
+    ApiResponse<Set<UserResponse>> getAuctionParticipantsOfUser(@RequestParam Integer auctionId) {
+        return ApiResponse.<Set<UserResponse>>builder()
+                .result(userService.getAuctionParticipantsOfUserCreate(auctionId))
+                .build();
+    }
+
+    @GetMapping("/get_all_users_joined_by_auctionid")
+    ApiResponse<Set<UserResponse>> getAuctionParticipants(@RequestParam Integer auctionId) {
+        return ApiResponse.<Set<UserResponse>>builder()
+                .result(userService.getAuctionParticipants(auctionId))
+                .build();
     }
 }

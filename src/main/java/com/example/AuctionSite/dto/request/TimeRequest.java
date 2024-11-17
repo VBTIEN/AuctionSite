@@ -1,8 +1,7 @@
 package com.example.AuctionSite.dto.request;
 
-import java.time.Duration;
-
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -19,5 +18,6 @@ public class TimeRequest {
     String name;
 
     @NotBlank(message = "TIME_BLANK")
-    Duration time;
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$", message = "TIME_INVALID_FORMAT")
+    String time;
 }

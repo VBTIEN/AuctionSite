@@ -1,6 +1,5 @@
 package com.example.AuctionSite.dto.response;
 
-import java.time.Duration;
 import java.util.Set;
 
 import lombok.*;
@@ -17,7 +16,7 @@ public class RanksResponse {
     // Tổng số lần người dùng mua hoặc bán thành công sản phẩm
     Integer successfulTransactions;
     // Thời gian người dùng đã tham gia vào website, tính bằng ngày
-    Duration membershipDuration;
+    String membershipDuration;
     // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
     Integer activityFrequency;
 
