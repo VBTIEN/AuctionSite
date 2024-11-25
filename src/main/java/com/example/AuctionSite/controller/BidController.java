@@ -2,6 +2,7 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import com.example.AuctionSite.dto.response.BidRankingResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.BidRequest;
@@ -55,5 +56,13 @@ public class BidController {
         return ApiResponse.<List<BidResponse>>builder()
                 .result(bidService.getAllBidsByAuctionIdOfUser(auctionid))
                 .build();
+    }
+    
+    @GetMapping("/ranking/{auctionId}")
+    ApiResponse<List<BidRankingResponse>> getBidRanking(@PathVariable Integer auctionId) {
+        List<BidRankingResponse> ranking = bidService.getBidRankingForAuction(auctionId);
+        return ApiResponse.<List<BidRankingResponse>>builder()
+            .result(ranking)
+            .build();
     }
 }

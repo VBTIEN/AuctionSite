@@ -126,7 +126,7 @@ public class ProductService {
             for (MultipartFile newFile : files) {
                 if (newFile.isEmpty()) continue;
 
-                String newImageUrl = "/images/" + newFile.getOriginalFilename();
+                String newImageUrl = "/auctionsite/images/" + newFile.getOriginalFilename();
                 if (existingImageUrls.contains(newImageUrl)) {
                     continue;
                 }
@@ -448,10 +448,8 @@ public class ProductService {
         String userId = userService.getUserId();
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Lấy danh sách sản phẩm đã đấu giá thành công
         Set<Product> productsSA = user.getProductSuccessfullyAuctioned();
 
-        // Chuyển danh sách sang Page
         Pageable pageable = PageRequest.of(page, size);
         List<Product> productList = new ArrayList<>(productsSA);
         int start = (int) pageable.getOffset();
@@ -467,12 +465,26 @@ public class ProductService {
 
         Page<Product> productPage = new PageImpl<>(productList.subList(start, end), pageable, productList.size());
 
-        // Map sang ProductResponse
         List<ProductResponse> products = productPage.getContent().stream()
                 .map(productMapper::toProductResponse)
                 .toList();
 
-        // Tạo ProductPageResponse
+        return ProductPageResponse.builder()
+                .products(products)
+                .totalPages(productPage.getTotalPages())
+                .totalElements(productPage.getTotalElements())
+                .build();
+    }
+
+    public ProductPageResponse getProductsByNamePaged(String productName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Product> productPage = productRepository.findByNameContainingIgnoreCase(productName, pageable);
+
+        List<ProductResponse> products = productPage.getContent().stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+
         return ProductPageResponse.builder()
                 .products(products)
                 .totalPages(productPage.getTotalPages())

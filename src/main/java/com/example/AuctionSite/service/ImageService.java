@@ -44,9 +44,9 @@ public class ImageService {
             }
 
             String fileName = file.getOriginalFilename();
-            String imageUrl = "/images/" + fileName;
+            String imageUrl = "/auctionsite/images/" + fileName;
 
-            if (imageRepository.existsByImageURL("/images/" + fileName)) {
+            if (imageRepository.existsByImageURL("/auctionsite/images/" + fileName)) {
                 throw new RuntimeException("Image existed: " + fileName);
             }
 
@@ -70,7 +70,8 @@ public class ImageService {
         Files.createDirectories(path.getParent());
         Files.write(path, file.getBytes());
 
-        Image image = Image.builder().imageURL("/images/" + fileName).build();
+        Image image =
+                Image.builder().imageURL("/auctionsite/images/" + fileName).build();
         imageRepository.save(image);
         return image;
     }
@@ -111,7 +112,7 @@ public class ImageService {
 
         Files.createDirectories(path.getParent());
 
-        if (imageRepository.existsByImageURL("/images/" + newFileName)) {
+        if (imageRepository.existsByImageURL("/auctionsite/images/" + newFileName)) {
             throw new RuntimeException("Image existed: " + newFileName);
         }
 
@@ -120,7 +121,7 @@ public class ImageService {
 
         Files.write(path, newFile.getBytes());
 
-        image.setImageURL("/images/" + newFileName);
+        image.setImageURL("/auctionsite/images/" + newFileName);
     }
 
     @PreAuthorize("hasAuthority('DELETE_IMAGE')")

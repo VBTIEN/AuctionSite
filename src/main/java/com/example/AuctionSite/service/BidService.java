@@ -1,9 +1,9 @@
 package com.example.AuctionSite.service;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.example.AuctionSite.dto.response.BidRankingResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -178,5 +178,26 @@ public class BidService {
         }
 
         return bidResponses;
+    }
+    
+    public List<BidRankingResponse> getBidRankingForAuction(Integer auctionId) {
+        List<Bid> bids = bidRepository.findBidsByAuctionIdOrderByBidMountDesc(auctionId);
+        Map<String, BidRankingResponse> userHighestBids = new LinkedHashMap<>();
+        int rank = 1;
+        
+        for (Bid bid : bids) {
+            String userId = bid.getUser().getId();
+            if (!userHighestBids.containsKey(userId)) {
+                BidRankingResponse rankingDTO = new BidRankingResponse(
+                    userId,
+                    bid.getUser().getUsername(),
+                    bid.getBidMount(),
+                    rank++
+                );
+                userHighestBids.put(userId, rankingDTO);
+            }
+        }
+        
+        return new ArrayList<>(userHighestBids.values());
     }
 }

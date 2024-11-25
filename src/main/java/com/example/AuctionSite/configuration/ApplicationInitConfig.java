@@ -156,7 +156,6 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("DELETE_CONTACT", "Delete contact permission");
 
         createPermissionIfNotExists("CREATE_CATEGORY", "Create category permission");
-        createPermissionIfNotExists("GET_ALL_CATEGORIES", "Get all categories permission");
         createPermissionIfNotExists("GET_CATEGORY_BY_NAME", "Get category by name permission");
         createPermissionIfNotExists("UPDATE_CATEGORY", "Update category permission");
         createPermissionIfNotExists("DELETE_CATEGORY", "Delete category permission");
@@ -401,7 +400,7 @@ public class ApplicationInitConfig {
     }
 
     private void initializeImages() {
-        createImagesIfNotExists(1, "/image_default/auction_image.jpg");
+        createImagesIfNotExists(1, "/auctionsite/image_default/auction_image.jpg");
     }
 
     private void initializeDeliveryTypes() {

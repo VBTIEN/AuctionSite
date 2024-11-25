@@ -4,6 +4,9 @@ server:
   context-path: /auctionsite
 
 spring:
+ web:
+  resources:
+   static-locations: classpath:/static/
  datasource:
   url: "jdbc:mysql://localhost:3306/auctionsite"
   username: root

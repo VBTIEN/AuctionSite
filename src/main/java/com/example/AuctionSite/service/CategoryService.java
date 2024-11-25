@@ -29,8 +29,7 @@ public class CategoryService {
         Category category = categoryMapper.toCategory(categoryRequest);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
-
-    @PreAuthorize("hasAuthority('GET_ALL_CATEGORIES')")
+    
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toCategoryResponse)

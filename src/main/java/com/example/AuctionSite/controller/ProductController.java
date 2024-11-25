@@ -188,4 +188,14 @@ public class ProductController {
                 .result(productService.getAllProductsSAPagedOfUser(page, size))
                 .build();
     }
+
+    @GetMapping("/products_by_id_paged")
+    ApiResponse<ProductPageResponse> getProductsByNamePaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String productName) {
+        return ApiResponse.<ProductPageResponse>builder()
+                .result(productService.getProductsByNamePaged(productName, page, size))
+                .build();
+    }
 }

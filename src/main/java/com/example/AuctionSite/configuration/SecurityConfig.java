@@ -44,6 +44,7 @@ public class SecurityConfig {
         "/products/products_pending_auction_paged",
         "/products/products_active_paged",
         "/products/products_sold_paged",
+        "/products/products_by_id_paged",
         // Auction
         "/auctions/search_auction_by_name",
         "/auctions/get_auctions_pending",
@@ -53,22 +54,27 @@ public class SecurityConfig {
         "/auctions/auctions_pending_paged",
         "/auctions/auctions_ongoing_paged",
         "/auctions/auctions_ended_paged",
+        //Category
+        "/categories/get_all_categories",
+        //Bid
+        "/bids/ranking/**"
     };
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
+    String[] ANY_PUBLIC = {
+        "/image_default/**", "/images/**",
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
-
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
+        
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(customJwtDecoder)
                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
@@ -76,6 +82,11 @@ public class SecurityConfig {
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 
     @Bean
