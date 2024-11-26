@@ -61,7 +61,8 @@ public class SecurityConfig {
     };
 
     String[] ANY_PUBLIC = {
-        "/image_default/**", "/images/**",
+        "/static/image_default/**",
+        "/static/images_folder/**",
     };
 
     @Bean

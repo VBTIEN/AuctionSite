@@ -32,7 +32,7 @@ public class ImageService {
     ImageMapper imageMapper;
     ProductRepository productRepository;
 
-    String UPLOAD_DIR = "src/main/resources/static/images/";
+    String UPLOAD_DIR = "src/main/resources/static/images_folder/";
 
     @PreAuthorize("hasAuthority('UPLOAD_IMAGES')")
     public List<ImageResponse> uploadImages(ImageRequest imageRequest) throws IOException {
@@ -44,9 +44,9 @@ public class ImageService {
             }
 
             String fileName = file.getOriginalFilename();
-            String imageUrl = "/auctionsite/images/" + fileName;
+            String imageUrl = "/auctionsite/images_folder/" + fileName;
 
-            if (imageRepository.existsByImageURL("/auctionsite/images/" + fileName)) {
+            if (imageRepository.existsByImageURL("/auctionsite/images_folder/" + fileName)) {
                 throw new RuntimeException("Image existed: " + fileName);
             }
 
@@ -71,7 +71,7 @@ public class ImageService {
         Files.write(path, file.getBytes());
 
         Image image =
-                Image.builder().imageURL("/auctionsite/images/" + fileName).build();
+                Image.builder().imageURL("/auctionsite/images_folder/" + fileName).build();
         imageRepository.save(image);
         return image;
     }
@@ -112,7 +112,7 @@ public class ImageService {
 
         Files.createDirectories(path.getParent());
 
-        if (imageRepository.existsByImageURL("/auctionsite/images/" + newFileName)) {
+        if (imageRepository.existsByImageURL("/auctionsite/images_folder/" + newFileName)) {
             throw new RuntimeException("Image existed: " + newFileName);
         }
 
@@ -121,7 +121,7 @@ public class ImageService {
 
         Files.write(path, newFile.getBytes());
 
-        image.setImageURL("/auctionsite/images/" + newFileName);
+        image.setImageURL("/auctionsite/images_folder/" + newFileName);
     }
 
     @PreAuthorize("hasAuthority('DELETE_IMAGE')")
