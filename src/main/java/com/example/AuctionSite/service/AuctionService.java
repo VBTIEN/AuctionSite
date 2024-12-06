@@ -312,6 +312,7 @@ public class AuctionService {
                                     .findById("COD_PAYMENT")
                                     .orElseThrow())
                             .status(waitingForPaymentStatus)
+                            .timeToPayment(timeRepository.findById("5m").orElseThrow())
                             .build();
                     receiptRepository.save(receipt);
                     log.info("Payment created for Auction {} with ID {}", auction.getId(), receipt.getId());

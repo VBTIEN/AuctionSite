@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.PaymentTypeRequest;
@@ -23,7 +25,7 @@ public class PaymentTypeController {
     PaymentTypeService paymentTypeService;
 
     @PostMapping("/create_payment_type")
-    ApiResponse<PaymentTypeResponse> createPaymentType(@RequestBody PaymentTypeRequest paymentTypeRequest) {
+    ApiResponse<PaymentTypeResponse> createPaymentType(@Valid @RequestBody PaymentTypeRequest paymentTypeRequest) {
         return ApiResponse.<PaymentTypeResponse>builder()
                 .result(paymentTypeService.createPaymentType(paymentTypeRequest))
                 .build();

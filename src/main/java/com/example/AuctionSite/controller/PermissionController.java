@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.PermissionRequest;
@@ -23,7 +25,7 @@ public class PermissionController {
     PermissionService permissionService;
 
     @PostMapping("/create_permission")
-    ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest permissionRequest) {
+    ApiResponse<PermissionResponse> createPermission(@Valid @RequestBody PermissionRequest permissionRequest) {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionService.createPermission(permissionRequest))
                 .build();

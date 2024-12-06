@@ -214,6 +214,8 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_RECEIPTS_OF_BUYER", "Get receipts of buyer permission"); //USER
         createPermissionIfNotExists("UPDATE_RECEIPT", "Update receipt permission"); //USER
         createPermissionIfNotExists("DELETE_RECEIPT", "Delete receipt permission"); //USER
+        createPermissionIfNotExists("PAYMENT_CONFIRM_SUCCESS", "Payment confirm success permission"); //USER
+        createPermissionIfNotExists("PAYMENT_CONFIRM_FAILURE", "Payment confirm failure permission"); //USER
         // spotless:on
     }
 
@@ -388,7 +390,7 @@ public class ApplicationInitConfig {
         // Payment
         createStatusIfNotExists("WAITING_FOR_PAYMENT", "Chờ thanh toán");
         createStatusIfNotExists("PAID", "Đã thanh toán");
-        createStatusIfNotExists("PAYMENT_CANCELLED", "Đã hủy thanh toán");
+        createStatusIfNotExists("CANCELLED", "Đã hủy thanh toán");
     }
 
     private void initializeRanks() {
@@ -500,6 +502,8 @@ public class ApplicationInitConfig {
                 permissions.add(permissionRepository.findById("GET_RECEIPTS_OF_BUYER").orElseThrow());
                 permissions.add(permissionRepository.findById("UPDATE_RECEIPT").orElseThrow());
                 permissions.add(permissionRepository.findById("DELETE_RECEIPT").orElseThrow());
+                permissions.add(permissionRepository.findById("PAYMENT_CONFIRM_SUCCESS").orElseThrow());
+                permissions.add(permissionRepository.findById("PAYMENT_CONFIRM_FAILURE").orElseThrow());
                 
                 role.setPermissions(permissions);
                 //spotless:on

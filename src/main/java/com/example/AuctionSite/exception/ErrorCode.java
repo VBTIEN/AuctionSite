@@ -86,6 +86,7 @@ public enum ErrorCode {
     NOTIFICATIONNAME_BLANK(1000, "Name must be not blank", HttpStatus.BAD_REQUEST),
     NOTIFICATIONNAME_INVALID_SIZE(1001, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
     NOTIFICATION_DESCRIPTION_BLANK(1002, "Description must be at most 50 characters", HttpStatus.BAD_REQUEST),
+    NOTIFICATION_NOT_FOUND(1003, "Notification not found", HttpStatus.BAD_REQUEST),
     // Image
     FILE_BLANK(1100, "File must be not blank", HttpStatus.BAD_REQUEST),
     IMAGE_NOT_FOUND_IN_PRODUCT_IMAGES(1101, "Selected image not found in product images", HttpStatus.BAD_REQUEST),

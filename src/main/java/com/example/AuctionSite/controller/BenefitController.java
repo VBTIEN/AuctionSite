@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.BenefitRequest;
@@ -23,7 +25,7 @@ public class BenefitController {
     BenefitService benefitService;
 
     @PostMapping("/create_benefit")
-    ApiResponse<BenefitResponse> createBenefit(@RequestBody BenefitRequest benefitRequest) {
+    ApiResponse<BenefitResponse> createBenefit(@Valid @RequestBody BenefitRequest benefitRequest) {
         return ApiResponse.<BenefitResponse>builder()
                 .result(benefitService.createBenefit(benefitRequest))
                 .build();

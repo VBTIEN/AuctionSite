@@ -54,28 +54,27 @@ public class SecurityConfig {
         "/auctions/auctions_pending_paged",
         "/auctions/auctions_ongoing_paged",
         "/auctions/auctions_ended_paged",
-        //Category
+        // Category
         "/categories/get_all_categories",
-        //Bid
+        // Bid
         "/bids/ranking/**"
     };
 
     String[] ANY_PUBLIC = {
-        "/static/image_default/**",
-        "/static/images_folder/**",
+        "/image_default/**", "/images_folder/**",
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated());
-        
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
+                .permitAll()
+                .anyRequest()
+                .authenticated());
+
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(customJwtDecoder)
                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))

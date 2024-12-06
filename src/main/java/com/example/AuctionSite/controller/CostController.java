@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.CostRequest;
@@ -23,7 +25,7 @@ public class CostController {
     CostService costService;
 
     @PostMapping("/create_cost")
-    ApiResponse<CostResponse> createCost(@RequestBody CostRequest costRequest) {
+    ApiResponse<CostResponse> createCost(@Valid @RequestBody CostRequest costRequest) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.createCost(costRequest))
                 .build();

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.ReceiptRequest;
 import com.example.AuctionSite.dto.response.ApiResponse;
+import com.example.AuctionSite.dto.response.PaymentConfirmationResponse;
 import com.example.AuctionSite.dto.response.ReceiptResponse;
 import com.example.AuctionSite.service.ReceiptService;
 
@@ -83,5 +84,19 @@ public class ReceiptController {
     ApiResponse<String> deleteReceipt(@PathVariable("id") Integer id) {
         receiptService.deleteReceipt(id);
         return ApiResponse.<String>builder().result("Receipt deleted").build();
+    }
+
+    @PostMapping("/payment_confirm_success")
+    ApiResponse<PaymentConfirmationResponse> paymentConfirmSuccess(@RequestParam Integer receiptId) {
+        return ApiResponse.<PaymentConfirmationResponse>builder()
+                .result(receiptService.paymentConfirmSuccess(receiptId))
+                .build();
+    }
+
+    @PostMapping("/payment_confirm_failure")
+    ApiResponse<PaymentConfirmationResponse> paymentConfirmFailure(@RequestParam Integer receiptId) {
+        return ApiResponse.<PaymentConfirmationResponse>builder()
+                .result(receiptService.paymentConfirmFailure(receiptId))
+                .build();
     }
 }

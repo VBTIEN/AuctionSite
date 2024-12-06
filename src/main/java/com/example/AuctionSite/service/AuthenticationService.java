@@ -3,9 +3,7 @@ package com.example.AuctionSite.service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,6 +81,7 @@ public class AuthenticationService {
 
         Status status = statusRepository.findById("ONLINE").orElseThrow();
         user.setStatus(status);
+
         userRepository.save(user);
 
         var token = generateToken(user);

@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.AuctionRequest;
@@ -24,7 +26,7 @@ public class AuctionController {
     AuctionService auctionService;
 
     @PostMapping("/create_auction")
-    ApiResponse<AuctionResponse> createAuction(@RequestBody AuctionRequest auctionRequest) {
+    ApiResponse<AuctionResponse> createAuction(@Valid @RequestBody AuctionRequest auctionRequest) {
         return ApiResponse.<AuctionResponse>builder()
                 .result(auctionService.createAuction(auctionRequest))
                 .build();
@@ -104,7 +106,7 @@ public class AuctionController {
 
     @GetMapping("/auctions_pending_paged")
     ApiResponse<AuctionPageResponse> getAllAuctionsPendingPaged(
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size) {
         return ApiResponse.<AuctionPageResponse>builder()
                 .result(auctionService.getAllAuctionsPendingPaged(page, size))
                 .build();
@@ -112,7 +114,7 @@ public class AuctionController {
 
     @GetMapping("/auctions_ongoing_paged")
     ApiResponse<AuctionPageResponse> getAllAuctionsOngoingPaged(
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size) {
         return ApiResponse.<AuctionPageResponse>builder()
                 .result(auctionService.getAllAuctionsOngoingPaged(page, size))
                 .build();
@@ -120,7 +122,7 @@ public class AuctionController {
 
     @GetMapping("/auctions_ended_paged")
     ApiResponse<AuctionPageResponse> getAllAuctionsEndedPaged(
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size) {
         return ApiResponse.<AuctionPageResponse>builder()
                 .result(auctionService.getAllAuctionsEndedPaged(page, size))
                 .build();

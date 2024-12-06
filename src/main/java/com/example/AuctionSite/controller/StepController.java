@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.StepRequest;
@@ -23,7 +25,7 @@ public class StepController {
     StepService stepService;
 
     @PostMapping("/create_step")
-    ApiResponse<StepResponse> createStep(@RequestBody StepRequest stepRequest) {
+    ApiResponse<StepResponse> createStep(@Valid @RequestBody StepRequest stepRequest) {
         return ApiResponse.<StepResponse>builder()
                 .result(stepService.createStep(stepRequest))
                 .build();

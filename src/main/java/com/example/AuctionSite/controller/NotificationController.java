@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.NotificationRequest;
@@ -23,7 +25,7 @@ public class NotificationController {
     NotificationService notificationService;
 
     @PostMapping("/create_notification")
-    ApiResponse<NotificationResponse> createNotification(@RequestBody NotificationRequest notificationRequest) {
+    ApiResponse<NotificationResponse> createNotification(@Valid @RequestBody NotificationRequest notificationRequest) {
         return ApiResponse.<NotificationResponse>builder()
                 .result(notificationService.createNotification(notificationRequest))
                 .build();

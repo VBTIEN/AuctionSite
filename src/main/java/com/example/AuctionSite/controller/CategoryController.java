@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.CategoryRequest;
@@ -23,7 +25,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping("/create_category")
-    ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest) {
+    ApiResponse<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.createCategory(categoryRequest))
                 .build();

@@ -20,6 +20,7 @@ public class ReceiptResponse {
     String name;
     String description;
     BigDecimal sellingPrice;
+    String remainingTimeToPayment;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss dd/MM/yyyy")
     LocalDateTime receiptTime;
@@ -35,4 +36,6 @@ public class ReceiptResponse {
     PaymentTypeResponse paymentType;
 
     StatusResponse status;
+
+    TimeResponse timeToPayment;
 }

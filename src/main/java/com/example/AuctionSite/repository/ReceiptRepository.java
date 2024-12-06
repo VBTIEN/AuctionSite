@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.AuctionSite.entity.Receipt;
+import com.example.AuctionSite.entity.Status;
 
 @Repository
 public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
@@ -15,4 +16,6 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
     List<Receipt> findAllBySellerId(String sellerId);
 
     List<Receipt> findAllByBuyerId(String buyerId);
+
+    List<Receipt> findAllByStatus(Status status);
 }

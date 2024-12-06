@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.RoleRequest;
@@ -23,7 +25,7 @@ public class RoleController {
     RoleService roleService;
 
     @PostMapping("/create_role")
-    ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest roleRequest) {
+    ApiResponse<RoleResponse> createRole(@Valid @RequestBody RoleRequest roleRequest) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleService.createRole(roleRequest))
                 .build();

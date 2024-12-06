@@ -70,8 +70,9 @@ public class ImageService {
         Files.createDirectories(path.getParent());
         Files.write(path, file.getBytes());
 
-        Image image =
-                Image.builder().imageURL("/auctionsite/images_folder/" + fileName).build();
+        Image image = Image.builder()
+                .imageURL("/auctionsite/images_folder/" + fileName)
+                .build();
         imageRepository.save(image);
         return image;
     }

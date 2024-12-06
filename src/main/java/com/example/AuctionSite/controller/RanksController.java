@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.RanksRequest;
@@ -23,7 +25,7 @@ public class RanksController {
     RanksService ranksService;
 
     @PostMapping("/create_rank")
-    ApiResponse<RanksResponse> createRank(@RequestBody RanksRequest ranksRequest) {
+    ApiResponse<RanksResponse> createRank(@Valid @RequestBody RanksRequest ranksRequest) {
         return ApiResponse.<RanksResponse>builder()
                 .result(ranksService.createRank(ranksRequest))
                 .build();

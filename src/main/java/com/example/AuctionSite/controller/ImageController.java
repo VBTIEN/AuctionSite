@@ -3,6 +3,8 @@ package com.example.AuctionSite.controller;
 import java.io.IOException;
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.ImageRequest;
@@ -24,7 +26,7 @@ public class ImageController {
     ImageService imageService;
 
     @PostMapping("/upload_images")
-    ApiResponse<List<ImageResponse>> uploadImages(@ModelAttribute ImageRequest imageRequest) throws IOException {
+    ApiResponse<List<ImageResponse>> uploadImages(@Valid @ModelAttribute ImageRequest imageRequest) throws IOException {
         return ApiResponse.<List<ImageResponse>>builder()
                 .result(imageService.uploadImages(imageRequest))
                 .build();

@@ -20,7 +20,7 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
     List<Bid> findAllByUserId(String userId);
 
     List<Bid> findByAuctionIdAndUserId(Integer auctionId, String userId);
-    
+
     @Query("SELECT b FROM Bid b WHERE b.auction.id = :auctionId ORDER BY b.bidMount DESC")
     List<Bid> findBidsByAuctionIdOrderByBidMountDesc(@Param("auctionId") Integer auctionId);
 }

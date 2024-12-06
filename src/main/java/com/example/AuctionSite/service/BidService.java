@@ -3,11 +3,11 @@ package com.example.AuctionSite.service;
 import java.math.BigDecimal;
 import java.util.*;
 
-import com.example.AuctionSite.dto.response.BidRankingResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.AuctionSite.dto.request.BidRequest;
+import com.example.AuctionSite.dto.response.BidRankingResponse;
 import com.example.AuctionSite.dto.response.BidResponse;
 import com.example.AuctionSite.entity.Auction;
 import com.example.AuctionSite.entity.Bid;
@@ -179,25 +179,21 @@ public class BidService {
 
         return bidResponses;
     }
-    
+
     public List<BidRankingResponse> getBidRankingForAuction(Integer auctionId) {
         List<Bid> bids = bidRepository.findBidsByAuctionIdOrderByBidMountDesc(auctionId);
         Map<String, BidRankingResponse> userHighestBids = new LinkedHashMap<>();
         int rank = 1;
-        
+
         for (Bid bid : bids) {
             String userId = bid.getUser().getId();
             if (!userHighestBids.containsKey(userId)) {
-                BidRankingResponse rankingDTO = new BidRankingResponse(
-                    userId,
-                    bid.getUser().getUsername(),
-                    bid.getBidMount(),
-                    rank++
-                );
+                BidRankingResponse rankingDTO =
+                        new BidRankingResponse(userId, bid.getUser().getUsername(), bid.getBidMount(), rank++);
                 userHighestBids.put(userId, rankingDTO);
             }
         }
-        
+
         return new ArrayList<>(userHighestBids.values());
     }
 }

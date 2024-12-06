@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.StatusRequest;
@@ -23,7 +25,7 @@ public class StatusController {
     StatusService statusService;
 
     @PostMapping("/create_status")
-    ApiResponse<StatusResponse> cerateStatus(@RequestBody StatusRequest statusRequest) {
+    ApiResponse<StatusResponse> cerateStatus(@Valid @RequestBody StatusRequest statusRequest) {
         return ApiResponse.<StatusResponse>builder()
                 .result(statusService.createStatus(statusRequest))
                 .build();

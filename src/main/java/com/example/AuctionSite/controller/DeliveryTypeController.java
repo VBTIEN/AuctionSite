@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.DeliveryTypeRequest;
@@ -23,7 +25,7 @@ public class DeliveryTypeController {
     DeliveryTypeService deliveryTypeService;
 
     @PostMapping("/create_delivery_type")
-    ApiResponse<DeliveryTypeResponse> createDeliveryType(@RequestBody DeliveryTypeRequest deliveryTypeRequest) {
+    ApiResponse<DeliveryTypeResponse> createDeliveryType(@Valid @RequestBody DeliveryTypeRequest deliveryTypeRequest) {
         return ApiResponse.<DeliveryTypeResponse>builder()
                 .result(deliveryTypeService.createDeliveryType(deliveryTypeRequest))
                 .build();

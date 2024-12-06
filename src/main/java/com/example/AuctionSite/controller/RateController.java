@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.RateRequest;
@@ -23,7 +25,7 @@ public class RateController {
     RateService rateService;
 
     @PostMapping("/create_rate")
-    ApiResponse<RateResponse> createRate(@RequestBody RateRequest rateRequest) {
+    ApiResponse<RateResponse> createRate(@Valid @RequestBody RateRequest rateRequest) {
         return ApiResponse.<RateResponse>builder()
                 .result(rateService.createRate(rateRequest))
                 .build();

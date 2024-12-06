@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.RegulationRequest;
@@ -23,7 +25,7 @@ public class RegulationController {
     RegulationService regulationService;
 
     @PostMapping("/create_regulation")
-    ApiResponse<RegulationResponse> createRegulation(@RequestBody RegulationRequest regulationRequest) {
+    ApiResponse<RegulationResponse> createRegulation(@Valid @RequestBody RegulationRequest regulationRequest) {
         return ApiResponse.<RegulationResponse>builder()
                 .result(regulationService.createRegulation(regulationRequest))
                 .build();

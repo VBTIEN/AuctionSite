@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.TimeRequest;
@@ -23,7 +25,7 @@ public class TimeController {
     TimeService timeService;
 
     @PostMapping("/create_time")
-    ApiResponse<TimeResponse> createTime(@RequestBody TimeRequest timeRequest) {
+    ApiResponse<TimeResponse> createTime(@Valid @RequestBody TimeRequest timeRequest) {
         return ApiResponse.<TimeResponse>builder()
                 .result(timeService.createTime(timeRequest))
                 .build();

@@ -2,6 +2,8 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.ContactRequest;
@@ -23,7 +25,7 @@ public class ContactController {
     ContactService contactService;
 
     @PostMapping("/create_contact")
-    ApiResponse<ContactResponse> createContact(@RequestBody ContactRequest contactRequest) {
+    ApiResponse<ContactResponse> createContact(@Valid @RequestBody ContactRequest contactRequest) {
         return ApiResponse.<ContactResponse>builder()
                 .result(contactService.createContact(contactRequest))
                 .build();

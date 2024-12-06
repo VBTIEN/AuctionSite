@@ -2,11 +2,13 @@ package com.example.AuctionSite.controller;
 
 import java.util.List;
 
-import com.example.AuctionSite.dto.response.BidRankingResponse;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.BidRequest;
 import com.example.AuctionSite.dto.response.ApiResponse;
+import com.example.AuctionSite.dto.response.BidRankingResponse;
 import com.example.AuctionSite.dto.response.BidResponse;
 import com.example.AuctionSite.service.BidService;
 
@@ -24,7 +26,7 @@ public class BidController {
     BidService bidService;
 
     @PostMapping("/create_bid")
-    ApiResponse<BidResponse> createBid(@RequestParam Integer auctionid, @RequestBody BidRequest bidRequest) {
+    ApiResponse<BidResponse> createBid(@RequestParam Integer auctionid, @Valid @RequestBody BidRequest bidRequest) {
         return ApiResponse.<BidResponse>builder()
                 .result(bidService.createBid(auctionid, bidRequest))
                 .build();
@@ -57,12 +59,10 @@ public class BidController {
                 .result(bidService.getAllBidsByAuctionIdOfUser(auctionid))
                 .build();
     }
-    
+
     @GetMapping("/ranking/{auctionId}")
     ApiResponse<List<BidRankingResponse>> getBidRanking(@PathVariable Integer auctionId) {
         List<BidRankingResponse> ranking = bidService.getBidRankingForAuction(auctionId);
-        return ApiResponse.<List<BidRankingResponse>>builder()
-            .result(ranking)
-            .build();
+        return ApiResponse.<List<BidRankingResponse>>builder().result(ranking).build();
     }
 }

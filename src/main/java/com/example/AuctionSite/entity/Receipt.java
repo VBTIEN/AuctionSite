@@ -1,6 +1,7 @@
 package com.example.AuctionSite.entity;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Receipt {
     String description;
     BigDecimal sellingPrice;
     LocalDateTime receiptTime;
+    Duration remainingTimeToPayment;
 
     @OneToOne
     Product product;
@@ -43,4 +45,7 @@ public class Receipt {
 
     @ManyToOne
     Status status;
+
+    @ManyToOne
+    Time timeToPayment;
 }
