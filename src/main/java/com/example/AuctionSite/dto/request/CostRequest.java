@@ -3,6 +3,7 @@ package com.example.AuctionSite.dto.request;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -18,6 +19,6 @@ public class CostRequest {
     @Size(max = 50, message = "COSTNAME_INVALID_SIZE")
     String name;
 
-    @NotBlank(message = "STARTCOST_BLANK")
+    @NotNull(message = "STARTCOST_BLANK")
     BigDecimal startCost;
 }

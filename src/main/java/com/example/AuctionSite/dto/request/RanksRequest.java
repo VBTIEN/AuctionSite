@@ -3,6 +3,7 @@ package com.example.AuctionSite.dto.request;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -23,7 +24,7 @@ public class RanksRequest {
     String description;
 
     // Tổng số lần người dùng mua hoặc bán thành công sản phẩm
-    @NotBlank(message = "SUCCESSFULTRANSACTIONS_BLANK")
+    @NotNull(message = "SUCCESSFULTRANSACTIONS_BLANK")
     Integer successfulTransactions;
 
     // Thời gian người dùng đã tham gia vào website, tính bằng ngày
@@ -32,7 +33,7 @@ public class RanksRequest {
     String membershipDuration;
 
     // Tần suất tham gia, chẳng hạn như số lần đăng nhập, tham gia đấu giá, và giao dịch trong khoảng thời gian
-    @NotBlank(message = "ACTIVITYFREQUENCY_BLANK")
+    @NotNull(message = "ACTIVITYFREQUENCY_BLANK")
     Integer activityFrequency;
 
     @NotBlank(message = "RANKS_BENEFITS_BLANK")

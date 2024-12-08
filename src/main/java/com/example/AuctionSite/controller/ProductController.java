@@ -28,7 +28,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping(value = "/create_product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<ProductResponse> createProduct(@Valid @ModelAttribute ProductRequest productRequest)
+    ApiResponse<ProductResponse> createProduct(@ModelAttribute ProductRequest productRequest)
             throws IOException {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(productRequest))

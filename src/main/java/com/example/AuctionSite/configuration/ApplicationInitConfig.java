@@ -212,6 +212,8 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_RECEIPTS_BY_BUYERID", "Get receipts by buyer id permission");
         createPermissionIfNotExists("GET_RECEIPTS_OF_SELLER", "Get receipts of seller permission"); //USER
         createPermissionIfNotExists("GET_RECEIPTS_OF_BUYER", "Get receipts of buyer permission"); //USER
+        createPermissionIfNotExists("GET_RECEIPT_BY_ID_OF_BUYER", "Get receipt by id of buyer permission"); //USER
+        createPermissionIfNotExists("GET_RECEIPT_BY_ID_OF_SELLER", "Get receipt by id of seller permission"); //USER
         createPermissionIfNotExists("UPDATE_RECEIPT", "Update receipt permission"); //USER
         createPermissionIfNotExists("DELETE_RECEIPT", "Delete receipt permission"); //USER
         createPermissionIfNotExists("PAYMENT_CONFIRM_SUCCESS", "Payment confirm success permission"); //USER
@@ -500,6 +502,8 @@ public class ApplicationInitConfig {
                 
                 permissions.add(permissionRepository.findById("GET_RECEIPTS_OF_SELLER").orElseThrow());
                 permissions.add(permissionRepository.findById("GET_RECEIPTS_OF_BUYER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_RECEIPT_BY_ID_OF_BUYER").orElseThrow());
+                permissions.add(permissionRepository.findById("GET_RECEIPT_BY_ID_OF_SELLER").orElseThrow());
                 permissions.add(permissionRepository.findById("UPDATE_RECEIPT").orElseThrow());
                 permissions.add(permissionRepository.findById("DELETE_RECEIPT").orElseThrow());
                 permissions.add(permissionRepository.findById("PAYMENT_CONFIRM_SUCCESS").orElseThrow());

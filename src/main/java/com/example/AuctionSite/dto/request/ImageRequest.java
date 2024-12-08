@@ -15,6 +15,5 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ImageRequest {
-    @NotBlank(message = "FILE_BLANK")
     List<MultipartFile> files;
 }

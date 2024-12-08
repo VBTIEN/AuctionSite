@@ -3,6 +3,7 @@ package com.example.AuctionSite.dto.request;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -18,6 +19,6 @@ public class StepRequest {
     @Size(max = 50, message = "STEPNAME_INVALID_SIZE")
     String name;
 
-    @NotBlank(message = "STEP_BLANK")
+    @NotNull(message = "STEP_BLANK")
     BigDecimal step;
 }

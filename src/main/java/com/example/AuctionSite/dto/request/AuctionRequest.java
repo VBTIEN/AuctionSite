@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,7 +32,7 @@ public class AuctionRequest {
     @NotBlank(message = "AUCTION_TIME_BLANK")
     String time;
 
-    @NotBlank(message = "AUCTION_PRODUCT_BLANK")
+    @NotNull(message = "AUCTION_PRODUCT_BLANK")
     Integer product;
 
     @NotBlank(message = "AUCTION_COST_BLANK")
