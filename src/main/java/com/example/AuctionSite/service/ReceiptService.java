@@ -1,5 +1,6 @@
 package com.example.AuctionSite.service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -213,6 +214,11 @@ public class ReceiptService {
         product.setStatus(
                 statusRepository.findById("SOLD").orElseThrow(() -> new RuntimeException("Status SOLD not found")));
         productRepository.save(product);
+        
+        User buyer = receipt.getBuyer();
+        BigDecimal newTotalAmountPaid = buyer.getTotalAmountPaid().add(receipt.getSellingPrice());
+        buyer.setTotalAmountPaid(newTotalAmountPaid);
+        userRepository.save(buyer); // Lưu lại thông tin người mua
 
         String confirmationMessage = String.format(
                 "Payment confirmed success for receipt ID %d. Product '%s' is now sold.",

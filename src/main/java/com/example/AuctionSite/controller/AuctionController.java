@@ -98,7 +98,7 @@ public class AuctionController {
 
     @GetMapping("/auctions_paged")
     ApiResponse<AuctionPageResponse> getAllAuctionsPaged(
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int size) {
         return ApiResponse.<AuctionPageResponse>builder()
                 .result(auctionService.getAllAuctionsPaged(page, size))
                 .build();

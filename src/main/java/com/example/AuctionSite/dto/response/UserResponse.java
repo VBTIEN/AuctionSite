@@ -1,5 +1,6 @@
 package com.example.AuctionSite.dto.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class UserResponse {
     Integer sales;
     Integer sumOfRate;
     Integer numberOfRate;
+    BigDecimal totalAmountPaid;
 
     Set<RoleResponse> roles;
 

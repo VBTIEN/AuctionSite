@@ -25,7 +25,7 @@ public class AuctionRequest {
     @NotBlank(message = "AUCTION_DESCRIPTION_BLANK")
     String description;
 
-    @FutureOrPresent(message = "STARTTIME_NOT_IN_FUTURE_OR_PRESENT")
+    //@FutureOrPresent(message = "STARTTIME_NOT_IN_FUTURE_OR_PRESENT")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss dd/MM/yyyy")
     LocalDateTime startTime;
 

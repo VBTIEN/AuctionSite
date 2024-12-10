@@ -17,6 +17,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +31,7 @@ import lombok.experimental.NonFinal;
 public class SecurityConfig {
     @NonFinal
     CustomJwtDecoder customJwtDecoder;
-
+    
     String[] PUBLIC_ENDPOINTS_POST = {
         "/users/register",
         "/authenticates/login",
@@ -34,7 +39,7 @@ public class SecurityConfig {
         "/authenticates/refresh",
         "/authenticates/introspect_token",
     };
-
+    
     String[] PUBLIC_ENDPOINTS_GET = {
         // Product
         "/products/search_product_by_name",
@@ -54,41 +59,42 @@ public class SecurityConfig {
         "/auctions/auctions_pending_paged",
         "/auctions/auctions_ongoing_paged",
         "/auctions/auctions_ended_paged",
-        // Category
+        //Category
         "/categories/get_all_categories",
-        // Bid
+        //Bid
         "/bids/ranking/**"
     };
-
+    
     String[] ANY_PUBLIC = {
-        "/image_default/**", "/images_folder/**",
+        "/image_default/**",
+        "/images_folder/**",
     };
-
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
-
+            .permitAll().requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+            .permitAll()
+            .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
+            .permitAll()
+            .anyRequest()
+            .authenticated());
+        
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                        .decoder(customJwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
-
+                .decoder(customJwtDecoder)
+                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+            .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
+        
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return httpSecurity.build();
     }
-
+    
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
-
+    
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -96,5 +102,17 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
+    }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

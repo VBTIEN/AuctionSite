@@ -1,5 +1,6 @@
 package com.example.AuctionSite.entity;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Set;
@@ -37,6 +38,9 @@ public class User {
     Integer sales;
     Integer sumOfRate;
     Integer numberOfRate;
+    
+    @Builder.Default
+    BigDecimal totalAmountPaid = BigDecimal.ZERO;
 
     @ManyToMany
     @ToString.Exclude
