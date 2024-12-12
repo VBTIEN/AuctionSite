@@ -62,7 +62,11 @@ public class SecurityConfig {
         //Category
         "/categories/get_all_categories",
         //Bid
-        "/bids/ranking/**"
+        "/bids/ranking/**",
+        //Regulation
+        "/regulations/get_all_regulations",
+        //Contact
+        "/contacts/get_all_contacts",
     };
     
     String[] ANY_PUBLIC = {

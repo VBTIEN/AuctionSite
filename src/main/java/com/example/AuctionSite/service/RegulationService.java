@@ -30,7 +30,6 @@ public class RegulationService {
         return regulationMapper.toRegulationResponse(regulationRepository.save(regulation));
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_REGULATIONS')")
     public List<RegulationResponse> getAllRegulations() {
         return regulationRepository.findAll().stream()
                 .map(regulationMapper::toRegulationResponse)

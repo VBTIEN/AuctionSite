@@ -30,7 +30,6 @@ public class ContactService {
         return contactMapper.toContactResponse(contactRepository.save(contact));
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_CONTACTS')")
     public List<ContactResponse> getAllContacts() {
         return contactRepository.findAll().stream()
                 .map(contactMapper::toContactResponse)

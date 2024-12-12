@@ -150,7 +150,6 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("DELETE_COST", "Delete cost permission");
 
         createPermissionIfNotExists("CREATE_CONTACT", "Create contact permission");
-        createPermissionIfNotExists("GET_ALL_CONTACTS", "Get all contacts permission");
         createPermissionIfNotExists("GET_CONTACT_BY_ID", "Get contact by id permission");
         createPermissionIfNotExists("UPDATE_CONTACT", "Update contact permission");
         createPermissionIfNotExists("DELETE_CONTACT", "Delete contact permission");
@@ -200,7 +199,6 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("DELETE_PAYMENTTYPE", "Delete payment type permission");
         
         createPermissionIfNotExists("CREATE_REGULATION", "Create regulation permission");
-        createPermissionIfNotExists("GET_ALL_REGULATIONS", "Get all regulations permission");
         createPermissionIfNotExists("GET_REGULATION_BY_NAME", "Get regulation by name permission");
         createPermissionIfNotExists("UPDATE_REGULATION", "Update regulation permission");
         createPermissionIfNotExists("DELETE_REGULATION", "Delete regulation permission");
