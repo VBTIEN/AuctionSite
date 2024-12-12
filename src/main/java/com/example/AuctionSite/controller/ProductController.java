@@ -3,8 +3,6 @@ package com.example.AuctionSite.controller;
 import java.io.IOException;
 import java.util.List;
 
-import jakarta.validation.Valid;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +26,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping(value = "/create_product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<ProductResponse> createProduct(@ModelAttribute ProductRequest productRequest)
-            throws IOException {
+    ApiResponse<ProductResponse> createProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(productRequest))
                 .build();

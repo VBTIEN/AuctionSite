@@ -137,22 +137,22 @@ public class BidService {
 
         return bidResponses;
     }
-    
+
     @PreAuthorize("hasAuthority('GET_ALL_BIDS_OF_USER')")
     public List<BidResponse> getAllBidsOfUser() {
         String userId = userService.getUserId();
-        
+
         List<Bid> bids = bidRepository.findAllByUserId(userId);
-        
+
         return bids.stream()
-            .map(bid -> BidResponse.builder()
-                .id(bid.getId())
-                .bidMount(bid.getBidMount())
-                .bid_of(bid.getAuction().getName())
-                .build())
-            .toList();
+                .map(bid -> BidResponse.builder()
+                        .id(bid.getId())
+                        .bidMount(bid.getBidMount())
+                        .bid_of(bid.getAuction().getName())
+                        .build())
+                .toList();
     }
-    
+
     @PreAuthorize("hasAuthority('GET_ALL_BIDS_BY_AUCTIONID_OF_USER')")
     public List<BidResponse> getAllBidsByAuctionIdOfUser(Integer auctionId) {
         String userId = userService.getUserId();

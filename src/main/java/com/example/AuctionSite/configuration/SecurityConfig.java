@@ -1,5 +1,7 @@
 package com.example.AuctionSite.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,16 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +31,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     @NonFinal
     CustomJwtDecoder customJwtDecoder;
-    
+
     String[] PUBLIC_ENDPOINTS_POST = {
         "/users/register",
         "/authenticates/login",
@@ -39,7 +39,7 @@ public class SecurityConfig {
         "/authenticates/refresh",
         "/authenticates/introspect_token",
     };
-    
+
     String[] PUBLIC_ENDPOINTS_GET = {
         // Product
         "/products/search_product_by_name",
@@ -59,46 +59,46 @@ public class SecurityConfig {
         "/auctions/auctions_pending_paged",
         "/auctions/auctions_ongoing_paged",
         "/auctions/auctions_ended_paged",
-        //Category
+        // Category
         "/categories/get_all_categories",
-        //Bid
+        // Bid
         "/bids/ranking/**",
-        //Regulation
+        // Regulation
         "/regulations/get_all_regulations",
-        //Contact
+        // Contact
         "/contacts/get_all_contacts",
     };
-    
+
     String[] ANY_PUBLIC = {
-        "/image_default/**",
-        "/images_folder/**",
+        "/image_default/**", "/images_folder/**",
     };
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
-            .permitAll().requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
-            .permitAll()
-            .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
-            .permitAll()
-            .anyRequest()
-            .authenticated());
-        
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, ANY_PUBLIC)
+                .permitAll()
+                .anyRequest()
+                .authenticated());
+
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                .decoder(customJwtDecoder)
-                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-            .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
-        
+                        .decoder(customJwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .authenticationEntryPoint(new JwTAuthenticationEntryPoint()));
+
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return httpSecurity.build();
     }
-    
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
-    
+
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -107,7 +107,7 @@ public class SecurityConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
-    
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

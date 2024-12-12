@@ -38,7 +38,7 @@ public class User {
     Integer sales;
     Integer sumOfRate;
     Integer numberOfRate;
-    
+
     @Builder.Default
     BigDecimal totalAmountPaid = BigDecimal.ZERO;
 

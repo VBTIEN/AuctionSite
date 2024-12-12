@@ -2,8 +2,6 @@ package com.example.AuctionSite.dto.request;
 
 import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.*;
