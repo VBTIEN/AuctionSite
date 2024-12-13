@@ -327,37 +327,29 @@ public class ReceiptService {
 
     @PreAuthorize("hasAuthority('GET_RECEIPT_BY_ID_OF_BUYER')")
     public ReceiptResponse getReceiptByIdOfBuyer(Integer receiptId) {
-        // Lấy ID người dùng hiện tại
         String currentUserId = userService.getUserId();
 
-        // Tìm hóa đơn theo ID
         Receipt receipt =
                 receiptRepository.findById(receiptId).orElseThrow(() -> new RuntimeException("Receipt not found"));
 
-        // Kiểm tra nếu người mua của hóa đơn không phải là người dùng hiện tại
         if (!receipt.getBuyer().getId().equals(currentUserId)) {
             throw new AccessDeniedException("You are not authorized to access this receipt");
         }
 
-        // Chuyển đổi và trả về ReceiptResponse
         return convertToReceiptResponse(receipt);
     }
 
     @PreAuthorize("hasAuthority('GET_RECEIPT_BY_ID_OF_SELLER')")
     public ReceiptResponse getReceiptByIdOfSeller(Integer receiptId) {
-        // Lấy ID người dùng hiện tại
         String currentUserId = userService.getUserId();
 
-        // Tìm hóa đơn theo ID
         Receipt receipt =
                 receiptRepository.findById(receiptId).orElseThrow(() -> new RuntimeException("Receipt not found"));
 
-        // Kiểm tra nếu người mua của hóa đơn không phải là người dùng hiện tại
         if (!receipt.getSeller().getId().equals(currentUserId)) {
             throw new AccessDeniedException("You are not authorized to access this receipt");
         }
 
-        // Chuyển đổi và trả về ReceiptResponse
         return convertToReceiptResponse(receipt);
     }
 }

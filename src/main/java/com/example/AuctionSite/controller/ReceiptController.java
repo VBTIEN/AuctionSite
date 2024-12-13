@@ -1,14 +1,23 @@
 package com.example.AuctionSite.controller;
 
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.AuctionSite.dto.request.ReceiptRequest;
 import com.example.AuctionSite.dto.response.ApiResponse;
 import com.example.AuctionSite.dto.response.PaymentConfirmationResponse;
 import com.example.AuctionSite.dto.response.ReceiptResponse;
+import com.example.AuctionSite.entity.Receipt;
+import com.example.AuctionSite.repository.ReceiptRepository;
+import com.example.AuctionSite.service.QRCodeService;
 import com.example.AuctionSite.service.ReceiptService;
+import com.google.zxing.WriterException;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ReceiptController {
+    ReceiptRepository receiptRepository;
     ReceiptService receiptService;
+    QRCodeService qrCodeService;
 
     @GetMapping("/get_all_receipts")
     ApiResponse<List<ReceiptResponse>> getAllReceipts() {
@@ -112,5 +123,38 @@ public class ReceiptController {
         return ApiResponse.<ReceiptResponse>builder()
                 .result(receiptService.getReceiptByIdOfSeller(receiptId))
                 .build();
+    }
+
+    @GetMapping("/qr-code/{id}")
+    public ResponseEntity<byte[]> generateQRCodeForReceipt(@PathVariable Integer id)
+            throws WriterException, IOException {
+        Receipt receipt = receiptRepository.findById(id).orElseThrow(() -> new RuntimeException("Receipt not found"));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+        String formattedReceiptTime = receipt.getReceiptTime().format(formatter);
+
+        String qrData = String.format(
+                """
+				Receipt ID: %d
+				Name: %s
+				Product: %s
+				Price: %s
+				Date: %s
+				DeliveryType: %s
+				PaymentType: %s""",
+                receipt.getId(),
+                receipt.getName(),
+                receipt.getProduct().getName(),
+                receipt.getSellingPrice(),
+                formattedReceiptTime,
+                receipt.getDeliveryType().getName(),
+                receipt.getPaymentType().getName());
+
+        byte[] qrCode = qrCodeService.generateQRCode(qrData, 300, 300);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+
+        return ResponseEntity.ok().headers(headers).body(qrCode);
     }
 }
