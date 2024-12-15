@@ -68,7 +68,13 @@ public class SecurityConfig {
         // Contact
         "/contacts/get_all_contacts",
         // Receipt
-        "/receipts/qr-code/**"
+        "/receipts/qr-code/**",
+        //Time
+        "/times/get_all_times",
+        //Step
+        "/steps/get_all_steps",
+        //Cost
+        "/costs/get_all_costs",
     };
 
     String[] ANY_PUBLIC = {

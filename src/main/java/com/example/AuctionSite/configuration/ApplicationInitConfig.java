@@ -70,13 +70,11 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_ALL_USERS_JOINED_BY_AUCTIONID", "Get all users joined by auctionid of user permission");
         
         createPermissionIfNotExists("CREATE_TIME", "Create time permission");
-        createPermissionIfNotExists("GET_ALL_TIMES", "Get all times permission");
         createPermissionIfNotExists("GET_TIME_BY_NAME", "Get time by name permission");
         createPermissionIfNotExists("UPDATE_TIME", "Update time permission");
         createPermissionIfNotExists("DELETE_TIME", "Delete time permission");
 
         createPermissionIfNotExists("CREATE_STEP", "Create step permission");
-        createPermissionIfNotExists("GET_ALL_STEPS", "Get all steps permission");
         createPermissionIfNotExists("GET_STEP_BY_NAME", "Get step by name permission");
         createPermissionIfNotExists("UPDATE_STEP", "Update step permission");
         createPermissionIfNotExists("DELETE_STEP", "Delete step permission");
@@ -144,7 +142,6 @@ public class ApplicationInitConfig {
         createPermissionIfNotExists("GET_ALL_FOLLOW_OF_USER", "Get all follows of user permission"); // USER
 
         createPermissionIfNotExists("CREATE_COST", "Create cost permission");
-        createPermissionIfNotExists("GET_ALL_COSTS", "Get all costs permission");
         createPermissionIfNotExists("GET_COST_BY_NAME", "Get cost by name permission");
         createPermissionIfNotExists("UPDATE_COST", "Update cost permission");
         createPermissionIfNotExists("DELETE_COST", "Delete cost permission");

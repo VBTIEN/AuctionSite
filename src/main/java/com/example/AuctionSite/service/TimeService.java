@@ -30,7 +30,6 @@ public class TimeService {
         return timeMapper.toTimeResponse(timeRepository.save(time));
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_TIMES')")
     public List<TimeResponse> getAllTimes() {
         return timeRepository.findAll().stream().map(timeMapper::toTimeResponse).toList();
     }

@@ -30,7 +30,6 @@ public class CostService {
         return costMapper.toCostResponse(costRepository.save(cost));
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_COSTS')")
     public List<CostResponse> getAllCosts() {
         return costRepository.findAll().stream().map(costMapper::toCostResponse).toList();
     }

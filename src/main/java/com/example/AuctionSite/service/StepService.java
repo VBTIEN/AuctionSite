@@ -30,7 +30,6 @@ public class StepService {
         return stepMapper.toStepResponse(stepRepository.save(step));
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_STEPS')")
     public List<StepResponse> getAllSteps() {
         return stepRepository.findAll().stream().map(stepMapper::toStepResponse).toList();
     }
