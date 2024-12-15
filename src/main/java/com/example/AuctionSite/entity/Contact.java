@@ -1,9 +1,6 @@
 package com.example.AuctionSite.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +18,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    @Lob
     String address;
     String phoneNumber;
     String email;

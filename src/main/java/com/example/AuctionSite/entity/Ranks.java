@@ -20,6 +20,7 @@ public class Ranks {
     @Id
     String name;
 
+    @Lob
     String description;
     // Tổng số lần người dùng mua hoặc bán thành công sản phẩm
     Integer successfulTransactions;

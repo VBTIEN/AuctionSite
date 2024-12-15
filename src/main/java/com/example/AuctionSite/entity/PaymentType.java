@@ -3,6 +3,7 @@ package com.example.AuctionSite.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.Lob;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,5 +19,6 @@ public class PaymentType {
     @Id
     String name;
 
+    @Lob
     String description;
 }

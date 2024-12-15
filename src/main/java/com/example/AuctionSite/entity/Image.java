@@ -18,5 +18,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    @Lob
     String imageURL;
 }

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 import lombok.*;
@@ -21,6 +22,7 @@ public class Rate {
     @Id
     Float numberOfStar;
 
+    @Lob
     String description;
 
     @OneToMany
