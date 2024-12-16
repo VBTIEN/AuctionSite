@@ -78,6 +78,7 @@ public enum ErrorCode {
     PRODUCT_CATEGORIES_BLANK(803, "Category must be not blank", HttpStatus.BAD_REQUEST),
     PRODUCT_NOT_OF_USER(804, "Product not yours", HttpStatus.BAD_REQUEST),
     PRODUCT_NOT_FOUND(805, "Product not found", HttpStatus.NOT_FOUND),
+    PRODUCT_NOT_ALLOWED_TO_DELETE(806, "Only products with ADDED status can be deleted.", HttpStatus.BAD_REQUEST),
     // Permission
     PERMISSIONNAME_BLANK(900, "Name must be not blank", HttpStatus.BAD_REQUEST),
     PERMISSIONNAME_INVALID_SIZE(901, "Name must be at most 50 characters", HttpStatus.BAD_REQUEST),
@@ -115,9 +116,12 @@ public enum ErrorCode {
     AUCTION_NOT_OF_USER(1509, "Auction not yours", HttpStatus.BAD_REQUEST),
     AUCTION_NOT_ONGOING(1510, "Auction is not currently ongoing", HttpStatus.BAD_REQUEST),
     CONSECUTIVE_BID_NOT_ALLOWED(1511, "User is not allowed to consecutively bid", HttpStatus.BAD_REQUEST),
+    AUCTION_NOT_ALLOWED_TO_DELETE(1512, "Only auctions with PENDING status will be deleted.", HttpStatus.BAD_REQUEST),
     // Follow
     FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED(1600, "Follow not found or you not permission", HttpStatus.NOT_FOUND),
     FOLLOW_NOT_FOUND_OR_NOT_FOLLOW(1601, "Follow not found or not follow", HttpStatus.NOT_FOUND),
+    ALREADY_FOLLOWED(1602, "Users have followed this auction.", HttpStatus.BAD_REQUEST),
+    INVALID_AUCTION_STATUS(1603, "Only auctions in PENDING status can be tracked.", HttpStatus.BAD_REQUEST),
     //Bid
     BIDMOUNT_BLANK(1700, "Bid mount must be not blank", HttpStatus.BAD_REQUEST),
     BIDMOUNT_INVALID(1701, "Bid amount must be at least", HttpStatus.BAD_REQUEST),

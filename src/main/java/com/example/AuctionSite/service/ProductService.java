@@ -157,6 +157,10 @@ public class ProductService {
                     .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_OF_USER));
         }
 
+        if (!"ADDED".equalsIgnoreCase(product.getStatus().getName())) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_ALLOWED_TO_DELETE);
+        }
+
         List<String> allImageUrls =
                 imageRepository.findAll().stream().map(Image::getImageURL).toList();
 

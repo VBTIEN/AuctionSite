@@ -37,13 +37,25 @@ public class FollowService {
 
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
 
+        if (!auction.getStatus().getName().equalsIgnoreCase("PENDING")) {
+            throw new AppException(ErrorCode.INVALID_AUCTION_STATUS);
+        }
+
+        boolean alreadyFollowed = followRepository.existsByUserIdAndAuctionId(user.getId(), auction.getId());
+        if (alreadyFollowed) {
+            throw new AppException(ErrorCode.ALREADY_FOLLOWED);
+        }
+
         Follow follow = Follow.builder().user(user).auction(auction).build();
         followRepository.save(follow);
 
         user.getFollows().add(follow);
         auction.getFollows().add(follow);
 
-        return FollowResponse.builder().followed(follow.getAuction().getName()).build();
+        return FollowResponse.builder()
+                .id(follow.getId())
+                .followed(follow.getAuction().getName())
+                .build();
     }
 
     @PreAuthorize("hasAuthority('UNFOLLOW_AUCTION')")
@@ -65,6 +77,7 @@ public class FollowService {
 
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
+                        .id(follow.getId())
                         .followed(follow.getAuction().getName())
                         .build())
                 .toList();
@@ -84,6 +97,7 @@ public class FollowService {
 
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
+                        .id(follow.getId())
                         .followed_by(follow.getUser().getUsername())
                         .build())
                 .toList();
@@ -104,6 +118,7 @@ public class FollowService {
 
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
+                        .id(follow.getId())
                         .followed(follow.getAuction().getName())
                         .build())
                 .toList();

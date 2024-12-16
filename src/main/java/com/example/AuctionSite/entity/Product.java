@@ -21,7 +21,7 @@ public class Product {
     Integer id;
 
     String name;
-    
+
     @Lob
     String description;
 

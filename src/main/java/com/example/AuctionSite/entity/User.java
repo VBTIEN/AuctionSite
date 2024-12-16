@@ -28,9 +28,10 @@ public class User {
     LocalDate dob;
     String fullName;
     String phoneNumber;
-    
+
     @Lob
     String address;
+
     LocalDate joiningDate;
 
     @Builder.Default

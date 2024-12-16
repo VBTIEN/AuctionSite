@@ -209,6 +209,10 @@ public class AuctionService {
                     .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_OF_USER));
         }
 
+        if (!"PENDING".equalsIgnoreCase(auction.getStatus().getName())) {
+            throw new AppException(ErrorCode.AUCTION_NOT_ALLOWED_TO_DELETE);
+        }
+
         List<Follow> follows = followRepository.findByAuctionId(id);
         followRepository.deleteAll(follows);
 

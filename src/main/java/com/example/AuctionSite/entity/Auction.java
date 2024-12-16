@@ -24,9 +24,10 @@ public class Auction {
     Integer id;
 
     String name;
-    
+
     @Lob
     String description;
+
     LocalDateTime startTime;
     LocalDateTime endTime;
     Integer finalCost;

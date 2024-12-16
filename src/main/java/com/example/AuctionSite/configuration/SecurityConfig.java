@@ -69,11 +69,11 @@ public class SecurityConfig {
         "/contacts/get_all_contacts",
         // Receipt
         "/receipts/qr-code/**",
-        //Time
+        // Time
         "/times/get_all_times",
-        //Step
+        // Step
         "/steps/get_all_steps",
-        //Cost
+        // Cost
         "/costs/get_all_costs",
     };
 

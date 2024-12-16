@@ -2,8 +2,8 @@ package com.example.AuctionSite.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.Lob;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

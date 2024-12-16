@@ -20,6 +20,7 @@ public class Contact {
 
     @Lob
     String address;
+
     String phoneNumber;
     String email;
 }

@@ -23,9 +23,10 @@ public class Receipt {
     Integer id;
 
     String name;
-    
+
     @Lob
     String description;
+
     BigDecimal sellingPrice;
     LocalDateTime receiptTime;
     Duration remainingTimeToPayment;
