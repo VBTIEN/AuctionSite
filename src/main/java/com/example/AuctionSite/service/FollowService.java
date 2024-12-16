@@ -75,18 +75,12 @@ public class FollowService {
 
         List<Follow> follows = followRepository.findAllByUser(user);
 
-        List<FollowResponse> followResponses = follows.stream()
+        return follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
                         .followed(follow.getAuction().getId())
                         .build())
                 .toList();
-
-        if (followResponses.isEmpty()) {
-            throw new AppException(ErrorCode.FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED);
-        }
-
-        return followResponses;
     }
 
     @PreAuthorize("hasAuthority('GET_ALL_FOLLOW_BY_AUCTIONID')")
@@ -95,18 +89,12 @@ public class FollowService {
 
         List<Follow> follows = followRepository.findAllByAuction(auction);
 
-        List<FollowResponse> followResponses = follows.stream()
+        return follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
                         .followed_by(follow.getUser().getId())
                         .build())
                 .toList();
-
-        if (followResponses.isEmpty()) {
-            throw new AppException(ErrorCode.FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED);
-        }
-
-        return followResponses;
     }
 
     @PreAuthorize("hasAuthority('GET_ALL_FOLLOW_OF_USER')")
@@ -116,17 +104,11 @@ public class FollowService {
 
         List<Follow> follows = followRepository.findAllByUser(user);
 
-        List<FollowResponse> followResponses = follows.stream()
+        return follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
                         .followed(follow.getAuction().getId())
                         .build())
                 .toList();
-
-        if (followResponses.isEmpty()) {
-            throw new AppException(ErrorCode.FOLLOW_NOT_FOUND_OR_NOT_FOLLOW);
-        }
-
-        return followResponses;
     }
 }
