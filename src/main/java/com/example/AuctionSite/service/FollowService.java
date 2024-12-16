@@ -36,7 +36,13 @@ public class FollowService {
         User user = userRepository.findById(userId).orElseThrow();
 
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
-
+        
+        String creatorId = auctionRepository.findCreatorIdByAuctionId(auctionId)
+            .orElseThrow();
+        if (creatorId.equals(userId)) {
+            throw new AppException(ErrorCode.CANNOT_FOLLOW_OWN_AUCTION);
+        }
+        
         if (!auction.getStatus().getName().equalsIgnoreCase("PENDING")) {
             throw new AppException(ErrorCode.INVALID_AUCTION_STATUS);
         }

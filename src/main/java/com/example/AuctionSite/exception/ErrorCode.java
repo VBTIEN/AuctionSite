@@ -117,6 +117,7 @@ public enum ErrorCode {
     AUCTION_NOT_ONGOING(1510, "Auction is not currently ongoing", HttpStatus.BAD_REQUEST),
     CONSECUTIVE_BID_NOT_ALLOWED(1511, "User is not allowed to consecutively bid", HttpStatus.BAD_REQUEST),
     AUCTION_NOT_ALLOWED_TO_DELETE(1512, "Only auctions with PENDING status will be deleted.", HttpStatus.BAD_REQUEST),
+    CANNOT_FOLLOW_OWN_AUCTION(1513, "Auction creators cannot follow their own auctions.", HttpStatus.BAD_REQUEST),
     // Follow
     FOLLOW_NOT_FOUND_OR_NOT_AUTHORIZED(1600, "Follow not found or you not permission", HttpStatus.NOT_FOUND),
     FOLLOW_NOT_FOUND_OR_NOT_FOLLOW(1601, "Follow not found or not follow", HttpStatus.NOT_FOUND),
