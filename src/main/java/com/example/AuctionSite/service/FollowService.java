@@ -54,7 +54,7 @@ public class FollowService {
 
         return FollowResponse.builder()
                 .id(follow.getId())
-                .followed(follow.getAuction().getName())
+                .followed(follow.getAuction().getId())
                 .build();
     }
 
@@ -78,7 +78,7 @@ public class FollowService {
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
-                        .followed(follow.getAuction().getName())
+                        .followed(follow.getAuction().getId())
                         .build())
                 .toList();
 
@@ -98,7 +98,7 @@ public class FollowService {
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
-                        .followed_by(follow.getUser().getUsername())
+                        .followed_by(follow.getUser().getId())
                         .build())
                 .toList();
 
@@ -119,7 +119,7 @@ public class FollowService {
         List<FollowResponse> followResponses = follows.stream()
                 .map(follow -> FollowResponse.builder()
                         .id(follow.getId())
-                        .followed(follow.getAuction().getName())
+                        .followed(follow.getAuction().getId())
                         .build())
                 .toList();
 

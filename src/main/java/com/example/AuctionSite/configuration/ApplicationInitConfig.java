@@ -224,6 +224,7 @@ public class ApplicationInitConfig {
     private void initializeTimes() {
         createTimeIfNotExists("5m", Duration.ofMinutes(5));
         createTimeIfNotExists("2m", Duration.ofMinutes(2));
+        createTimeIfNotExists("1m", Duration.ofMinutes(1));
 
         createTimeIfNotExists("1h", Duration.ofHours(1));
         createTimeIfNotExists("2h", Duration.ofHours(2));

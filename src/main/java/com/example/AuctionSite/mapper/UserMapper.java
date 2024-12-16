@@ -50,7 +50,7 @@ public interface UserMapper {
         }
         return follows.stream()
                 .map(follow -> FollowResponse.builder()
-                        .followed(follow.getAuction().getName())
+                        .followed(follow.getAuction().getId())
                         .build())
                 .collect(Collectors.toSet());
     }

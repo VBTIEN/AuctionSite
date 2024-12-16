@@ -13,6 +13,6 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FollowResponse {
     Integer id;
-    String followed;
+    Integer followed;
     String followed_by;
 }
